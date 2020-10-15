@@ -1,0 +1,1366 @@
+%&encoding=UTF-8 Unicode
+%
+%
+\documentclass[a4paper,titlepage=true,twoside]{scrartcl}
+
+%% TODO: 
+%% - Synonyme: Routine - Prozedur - Funktion - Methode -
+%% - Beispiel: ``Die Qt-Programmiersprache ...''
+%% - Verbraucherzentrale darf weiter die Präposition "wegen" verwenden
+%%   http://www.golem.de/0912/71807.html
+%% - Kürzen:
+%%  Wenn man sich also entschieden haben sollte, dass man auf ein Wacom Grafik-Tablett setzen möchte
+%%  => Hat man sich/Haben Sie sich für ein Wacom Grafik-Tablett entschieden, ...
+%%
+%% - Der haushohe Felsblock war am Montagabend kurz vor 20.00 Uhr ohne Vorwarnung 
+%%   auf das Anwesen der vierköpfigen Familie gestürzt.
+
+% Ich schreibe in UTF-8, daher:
+\usepackage[utf8]{inputenc}
+
+% Verwenden von Schriftarten in der T1-Kodierung
+\usepackage[T1]{fontenc}
+
+% 
+% \usepackage{charter}
+% \usepackage{palatino}
+
+% Dokument ist in Deutsch geschrieben, daher:
+\usepackage[ngerman]{babel}
+
+% 
+\usepackage{textcomp}
+
+% Farben:
+\usepackage{color}
+%
+%\usepackage{theorem}
+
+% Erweiterte Referenzen:
+\usepackage[ngerman]{varioref}
+
+% Verbesserte Trennung und Anzeige von URLs
+\usepackage{url}
+
+% Zum Nummerieren von Zeilen:
+\usepackage{lineno}
+
+% If-then-else Abfrage
+\usepackage{ifthen}
+%\usepackage{eqexam}
+
+\usepackage{longtable}
+
+% Mikrotypografische Verbesserungen:
+%\usepackage{fontspec}
+
+%\usepackage{charter}
+
+%\renewcommand{\rmdefault}{bch}
+
+
+% Als letztes(!) Paket einbinden:
+\usepackage[%
+	pdftitle={Wie schreibe ich eine Projektarbeit?},%  Titel des PDF Dokuments.
+	pdfauthor={Thomas Schraitle},%                     Autor des PDF Dokuments.
+	pdfsubject={Projektarbeit},%                       Thema des PDF Dokuments.
+	pdfcreator={Thomas Schraitle},%                    Erzeuger des PDF Dokuments.
+	pdfkeywords={Projektarbeit,Deutsche Sprache},%     Schlüsselwörter für PDF.
+	pdfpagemode=UseOutlines,%                          Inhaltsverzeichnis anzeigen beim öffnen
+	pdfdisplaydoctitle=true,%                          Dokumenttitel statt Dateiname anzeigen.
+	pdflang=de%                                        Sprache des Dokuments.
+]{hyperref}
+
+% Titel und andere Daten für die Titelseite definieren:
+\title{\hspace{0pt}\\[2ex]Wie schreibe ich eine Projektarbeit?}
+\subtitle{Sprache, Struktur, Typografie}
+\author{Thomas Schraitle\\\email{toms@suse.de}}
+\date{\today\\Version 1.1}
+
+%
+% Selbstdefinierte Befehle:
+\makeatletter
+% \renewcommand{\rmdefault}{ppl}
+\newcommand{\greek}[1]{\ensuremath{#1}}
+\newcommand{\gquote}[1]{\glqq #1\grqq}
+\newcommand{\fquote}[1]{\frqq #1\flqq}
+\newcommand{\email}[1]{\ttfamily\textless #1\textgreater}
+\newcommand{\itemtitle}[1]{\textbf{#1}}
+\newcommand{\coltitle}[1]{\textit{#1}}
+\newcommand{\latexenv}[1]{\textsf{#1}}
+\newcommand{\markerror}[1]{\textcolor{red}{#1}}
+\renewcommand{\@makefnmark}{\textsuperscript{\sffamily\@thefnmark}}
+\renewcommand{\@makefntext}[1]{\noindent\makebox[1.8em][r]{\textsf{\@thefnmark}\hss}#1}
+
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\makeatother
+% Selbstdefinierte Farben:
+\definecolor{light}{gray}{.80}
+
+% Selbstdefinierte Theoreme:
+% {\theoremstyle{break}\theorembodyfont{\sffamily}%
+% \theoremheaderfont{\sffamily}%
+% \newtheorem{exa}{Beispiel}[section]
+% }
+% 
+% {\theoremstyle{plain}\theorembodyfont{\sffamily}%
+% \theoremheaderfont{\sffamily\bfseries}%
+% \newtheorem{merksatz}{Merksatz}[section]
+% }
+
+\newcounter{Example}%[section]
+\newcommand{\Exampletitle}{\textbf{Beispiel~\theExample}}
+\newenvironment{Example}[1][]%
+{%
+\par\smallskip%
+\setlength{\parindent}{0pt}%
+\refstepcounter{Example}%
+%\begin{sffamily}%
+\begin{trivlist}\item[]\sffamily%
+\Exampletitle%
+\ifthenelse{\equal{#1}{}}%
+{\par\nopagebreak}%
+{:\hspace{0.75em}#1\par\nopagebreak}%
+}%
+{\end{trivlist}%
+%\end{sffamily}%
+\smallskip%
+%\vspace{1.5em}
+}
+
+\newcounter{merksatz}%[Example]
+\newcommand{\merksatztitle}{\textbf{Tipp~\themerksatz}}
+\newenvironment{merksatz}[1][]%
+{\par\smallskip%
+\setlength{\parindent}{0pt}%
+\refstepcounter{merksatz}%
+\begin{trivlist}\item[]\sffamily%
+\merksatztitle:\hspace{0.25em}
+}%
+{\end{trivlist}\smallskip}
+
+
+% Umgebung für Zitate
+\newsavebox{\Epigraph}
+\newenvironment{epigraph}[1]%
+{\sbox{\Epigraph}{\textit{#1}}
+\begin{quote}}%
+{%\\*\hspace*{\fill}\nolinebreak\hspace*{\fill}%
+\\*\hspace{0pt}---\usebox{\Epigraph}%
+\end{quote}}
+
+
+
+% ###################################################
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section*{Vorwort}
+\addcontentsline{toc}{section}{Vorwort}
+Dieses Dokument soll dir helfen, oft gemachte Fehler zu vermeiden.
+Es fasst die wichtigsten Punkte zusammen, dennoch empfehle ich, 
+ergänzende Literatur zu verwenden. Dieses Dokument kann
+lediglich eine \emph{Übersicht} sein, nie eine komplette Referenz.
+
+Herzlichen Dank an Sandra Farrell, Tanja Roth und Jürgen Weigert
+für die Korrekturen und Verbesserungsvorschläge.
+
+\vspace{1.5em}
+\noindent Thomas Schraitle, \today
+
+
+\newpage
+%%
+%% ----------------------------------------------------------
+%%
+\part{Sprache}
+\begin{epigraph}{Isaac Goldberg}
+ (Technical) communication is to write and to say\\
+ The geekiest things in the simplest way.
+\end{epigraph}
+
+\section{Vergleich zwischen Schreiben und Programmieren}
+Schreiben und Programmieren haben viele Gemeinsamkeiten (nach \cite{bib.rosenberg}):
+
+\begin{small}
+\begin{itemize}
+ \item \itemtitle{Erfolgreiche Projekte verlangen gründliche Planung.} \\
+  Umfangreiche Projekte benötigen eine sorgfältige Planung bevor eine Zeile Code
+geschrieben wird. Entsprechend müssen bei großen Dokumenten Rahmenbedingungen 
+festgelegt werden.
+ \item \itemtitle{Erfolgreiche Projekte erfordern Prüfungen.} \\
+Gute Programmierer überprüfen ihren Code auf Fehler. Entsprechend suchen 
+Schreiber Rückmeldungen, um ihre Dokumentation zu verbessern.
+ \item \itemtitle{Erfolgreiche Projekte benötigen Iterationen.} \\
+Egal wie gut geplant wurde, um Perfektion zu erreichen erfordert Programmierung 
+immer ein gewisses Maß an Wiederholung. Ein altes Sprichwort der Dokumentation
+lautet: \gquote{Schreiben ist Neuschreiben}.
+ \item \itemtitle{Das wichtigste Prinzip ist Sparsamkeit.} \\
+Sowohl beim Programmieren als auch beim Schreiben ist einfacher besser.
+ \item \itemtitle{Sparsamkeit zu erreichen ist schwierig} \\
+Eleganz hat ihren Preis: Einen Algorithmus in 10 Zeilen zu programmieren dauert 
+normalerweise länger als in 20 Zeilen. Entsprechend ist es schwieriger eine
+komplexe Idee auf 10 Seiten zu beschreiben als auf 20 Seiten.
+\end{itemize}
+\end{small}
+
+
+
+% \section{Allgemeines und Spezielles zum Schreiben}\label{sec.general}
+% Für gewöhnlich stellt sich einem Autor beim Schreiben die folgenden Fragen:
+% 
+% %%
+% \begin{description}
+%  \item[Wer liest es?] \emph{Zielgruppe}\\
+% %  Einsteiger, Anwender, Entwickler, Rentner, Kinder, Umsteiger, \ldots
+%   Das Wichtigste beim Schreiben ist die Zielgruppe. Denn für dafür schreibst du.
+%   Von wem wird dein Text gelesen? Ist es ein Einsteiger, Anwender, Entwickler,
+%   Rentner, Kind oder Umsteiger? Ist deine Zielgruppe einheitlich oder uneinheitlich?
+%   Welche Erwartungen hat deine Zielgruppe an den Text? Ist der Empfänger der 
+%   Botschaft unbekannt, \gquote{trommelst du vor der falschen Hütte}. 
+% % \begin{itemize}
+% %  \item Ist die Zielgruppe homogen oder uneinheitlich? \\
+% %   Beispiel: \gquote{Linux for Dummies} = Einsteigerbuch für Linuxinteressierte
+% %  \item Wie ist der Bildungsstand? Hauptschule oder Hochschule? \\
+% %   Beispiel: Bildzeitung, Fachbuch für organische Chemie
+% %  \item Hat die Zielgruppe bestimmte Merkmale oder Einschränkungen? \\
+% %   Beispiel: Kinderbücher
+% %  \item Welche Erwartungen hat deine Zielgruppe? \\
+% %   Beispiel: Unterhaltung, Beratung, \ldots
+% % \end{itemize}
+% 
+%  \item[Weshalb wird dein Text gelesen?] \emph{Motivation}\\
+% % Lernen, Nachschlagen, Informieren, Erinnern, Ausprobieren, \ldots
+%   Was spricht den Leser an, deinen Text zu lesen? Wie verwendet der Leser
+%   deinen Text: Um zu lernen, nachzuschlagen oder sich zu informieren?
+% 
+%  \item[Was enthält es?] \emph{Inhalt und Struktur}\\
+% %  Abschnitte, Tabellen, Abbildungen, Grafiken, \ldots
+%   Struktur heisst, deine Gedanken ordnen. Romane haben meist eine sehr flache Struktur,
+%   Begriffe in Lexika sind nach Buchstaben sortiert und Magazine enthalten Artikel
+%   mit Abschnitten. Sie alle erfüllen ihren Zweck: Das Geschriebene erkennen, 
+%   einordnen und wiederfinden.
+% 
+%  \item[Wie wird es gelesen?] \emph{Leseart}\\
+% %  linear (von vorn bis hinten), konsultierend (Lexika), 
+% %  informierend (Magazin, Zeitschriften), \ldots
+%   Ein Roman wird von vorn bis hinten gelesen, ein Lexikon nur dann, wenn etwas
+%   benötigt wird und in einem Magazin blättern wir und lesen, wenn uns ein
+%   Artikel interessiert. Wie wird dein Text gelesen?
+% 
+%  \item[Wie wird es dargestellt?] \emph{Layout und Typografie}\\
+% %  Satzspiegel, Aufteilung der Ränder, Schriftarten, Auszeichnungen, \ldots
+%   Layout und Typografie ist nie Selbstzweck. Ungünstige Typografie verursacht 
+%   \gquote{Geräusche beim Lesen}: der Inhalt deiner Arbeit wird entweder 
+%   missverstanden oder ins Gegenteil verkehrt. Daher muss sich die Typografie
+%   dem Text anpassen und nicht umgekehrt. Für die meisten Texte heisst 
+%   das oberste Prinzip \emph{Lesbarkeit}, Ausnahme ist die Werbung. 
+%   Layout und Typografie sind \emph{Dienst am Leser}.
+%   Die beste Typografie ist die, welche unauffällig ist.
+% 
+% % \item[Womit wird es gelesen?] \emph{Medium}\\
+% %  gedrucktes Buch, am Bildschirm, mit einem E-Book-Lesegerät, \ldots
+% \end{description}
+
+
+\section{Zielgruppe kennen}
+Wer liest deine Projektarbeit? Es sind IHK-Prüfer die meist ein oberflächliches Wissen von
+Computern haben: Bäckermeister, Musiklehrer, Maurer oder Buchhalter. 
+Deine Projektarbeit muss sowohl von einem Kollegen als auch von einem fachfremden Leser
+verstanden werden. Darum: Schreibe nicht für den Kollegen vom Fach, sondern für den Bäckermeister.
+
+
+\section{Wie schreibe ich verständlich?}
+Ob ein Leser einen Satz versteht, hängt von vier 
+Faktoren ab \cite{bib.baumert}:
+
+\begin{description}
+ \item[Bildung] Sie entscheidet, wie ein Text aussehen muss oder darf, 
+ damit Leser ihn verstehen können.
+ \item[Sprachwissen] Muttersprachler oder Deutsch als Fremdsprache? 
+Wer Deutsch nicht als Muttersprache spricht, kennt oft weniger Wörter als Muttersprachler.
+ \item[Fachkenntnisse] Liest ein Fachmann oder Laie? 
+ \item[Lesealter] Je jünger desto geringer der Wortschatz.
+\end{description}
+
+Aus den genannten Punkten ergeben sich die folgenden Tipps, wie ein Text
+verständlich wird (aus \cite{bib.rosenberg}):
+
+\begin{itemize}
+ \item Schreibe zielgruppenspezifisch.
+ \item Schreibe eindeutig.
+ \item Schreibe prägnant.
+ \item Hilf dem Leser.
+\end{itemize}
+
+
+% Das Theorem des technischen Schreibens:
+% 
+% \begin{itemize}
+%  \item Halte deine Sätze kurz indem du unnötige Wörter entfernst.
+%  \item Schreibe Sätze hauptsächlich im Aktiv.
+%  \item Entferne unnötige Sätze oder bedeutungslose Konzepte.
+% \end{itemize}
+% 
+% Ein weiteres Theorem
+% 
+% \begin{itemize}
+%  \item Sag deinem Leser was du gleich sagen wirst.
+%  \item Sag es.
+%  \item Fasse zusammen, was du gesagt hast.
+% \end{itemize}
+
+
+\section{Passende Wörter finden}
+\begin{epigraph}{Cäsar}
+ Jedes selten gehörte und ungewohnte Wort solltest du fliehen wie ein Riff.
+\end{epigraph}
+
+%In \cite{bib.baumert} wird vermutet, dass konkrete Substantive (Maus, Festplatte, 
+%Bildschirm \ldots) anders im Langzeitgedächnis gespeichert sind als abstrakte 
+%Wörter (Algorithmus, Toolkit, Tendenz \ldots)
+
+
+\subsection{Komposita auflösen}
+Komposita sind \emph{zusammengesetzte Wörter}: aus \emph{Käse} und \emph{Kuchen}
+wird der \emph{Käsekuchen}, also ein Kuchen der Käse enthält. Preisfrage: Aus was 
+besteht \emph{Hundekuchen}, \emph{Sandkuchen}, \emph{Baumkuchen}, 
+\emph{Pustekuchen}\ldots?
+
+\begin{Example}[Zusammengesetzte Wörter auflösen]
+\begin{longtable}{lp{.45\linewidth}}
+ \coltitle{Schlecht}   & \coltitle{Besser}  \\
+% Autobahngegenrichtungsfahrbahnbenutzer 
+Autobahnfahrstreifengegenrichtungsbenutzer
+& Geisterfahrer, Falschfahrer \\
+Kinematographentheater  & Kino \\
+Haupteinflussfaktor       & Vor allem beeinflusst\ldots \\
+Dateinamenexpandierungsoption & Option für Dateinamensexpandierung --- oder: \\
+                          & Dateinamen werden aufgelöst mit der Option\ldots \\
+Festplattenanschlusskabelklemme & Klemme zum Anschließen des Festplattenkabels \\
+Programmausnahmefehler    & Ausnahme (oder Fehler) im Programm \\
+Lizenzfreischaltungsknopf & Freischalten der Lizenz durch/mit\ldots \\
+\end{longtable}
+\end{Example}
+
+\begin{merksatz}
+Verwende möglichst kurze Wörter.
+\end{merksatz}
+
+\subsection{Synonyme mit Bedacht wählen}
+Ein Synonym ist ein \emph{sinnverwandtes Wort}. Jedoch sind die wenigsten
+Wörter wirklich austauschbar: Anlitz, Fratze, Visage, Fresse haben zwar mit
+dem Begriff \emph{Gesicht} zu tun, die \emph{Stilebene} ist jedoch unterschiedlich.
+
+Die Computertechnik nutzt eine Fülle von Fach- und Fremdwörtern für die es 
+keine Synonyme gibt: Grafikkarte, Maus, regulärer Ausdruck und andere.
+
+Auch wenn im Deutsch-Unterricht die Wiederholung verpönt war: es ist besser
+ein Wort zu wiederholen als krampfhaft zu versuchen ein (unpassendes) 
+Synonym zu finden. Manchmal hilft es auch, den Satz etwas umzuschreiben.
+
+\begin{merksatz}
+Verwende für ein Objekt in deinem Dokument immer den gleichen Begriff.
+Beispiel: für Dialogfenster immer Dialogfenster, nicht Screen, Maske, Dialog,
+Programmfenster, Hauptfenster\ldots
+\end{merksatz}
+
+
+\subsection{Fremdwörter bewußt einsetzen}
+In folgenden Fällen sind Fremdwörter willkommen oder erlaubt:
+
+\begin{itemize}
+ \item es verständlich und treffend ist (Code, \ldots)
+ \item es verständlich und auf dieser Stilebene nicht durch ein deutsches Wort zu
+ersetzen ist (Routing(?), Entity, \ldots)
+ \item zwar nicht allgemein verständlich, aber bisher ohne deutsche Entsprechung
+  ist (Cluster)
+\end{itemize}
+
+Definiere unbekannte Wörter. Meist bietet es sich an, das innerhalb eines
+Satzes zu tun und für die Erklärungen einen weiteren Satz anzufügen (siehe auch
+Beispiel~\ref{ex.termdef}).
+Der neue Begriff wird hierbei in \emph{Kursivschrift} gesetzt:
+
+\begin{Example}[Definieren von Begriffen]
+ Gespeichert werden die Daten auf einer \emph{Festplatte}. Eine Festplatte ist ein
+magnetisches Speichermedium in der Computertechnik. [\ldots]
+\end{Example}
+
+%\begin{merksatz}
+%Verwende Fremdwörter da, wo es sinnvoll ist. Definieren nicht vergessen!
+%\end{merksatz}
+
+
+\subsection{Anglizismen \gquote{killen}}
+Ein Sonderfall des Fremdworts ist der \emph{Anglizismus}. Alexander Baumert 
+schreibt in \cite{bib.baumert}:
+
+\begin{quote}
+2006 hat die Endmark GmbH zwölf englisch-deutsche Werbesprüche auf ihre
+Verständlichkeit getestet. Am besten schnitt \emph{Feel the difference} ab, 
+immerhin 55\,\% übersetzen diese Lösung richtig. [\ldots] 45\,\% begreifen
+den zentralen Satz falsch!
+\end{quote}
+
+\begin{Example}[Fehlerhaft verstandene Werbesprüche]
+\begin{tabular}{ll}
+ \coltitle{Original}  & \coltitle{Wurde verstanden als\ldots}  \\
+Feel the difference   & Fühle das Differential (Ford)\\
+Impossible is nothing & ein imposantes Nichts (adidas) \\
+Make the most of now  & mach keinen Most daraus (Vodafone) \\
+Fly Euro Shuttle      & der Euro-Schüttel-Flug /\\
+                      & Schüttel den Euro zum Fliegen (Air-Berlin) \\
+Come in and find out & Komm herein und finde wieder heraus (Douglas) %\\
+%Amazon -- and you're done --- Amazon und du bist getan
+\end{tabular}
+\end{Example}
+
+Die Frage lautet: Verstehen die IHK-Prüfer den englischen Begriff? 
+Oder \emph{glauben} sie ihn zu verstehen? 
+
+Ein Anglizismus per se ist weder gut noch schlecht; Schlecht ist er dann,
+wenn ohne Not ein englischer Begriff gewählt wurde, obwohl es eine passende
+deutsche Übersetzung gibt. Besser ist daher \emph{Festplatte} statt \emph{harddisk},
+\emph{Speicher} statt \emph{memory}, \emph{Tastatur} statt 
+\emph{keyboard}\footnote{Keyboard ist im Englischen zweideutig: Es kann eine 
+Computertastatur gemeint sein oder eine Klaviatur.} 
+und \emph{Fehler} statt \emph{error}. 
+
+Gibt es keinen passenden deutschsprachigen Begriff? Definiere ihn, wie
+folgendes Beispiel zeigt:
+
+\begin{Example}[Mehrere Möglichkeiten wie ein englischer Begriff definiert werden kann]\label{ex.termdef}
+Formuliere einen Satz, in dem das Wort \emph{Hyperlink} vorkommt:
+\begin{enumerate}
+ \item Durch getrennte Hauptsätze:\\
+  Webseiten enthalten \emph{Hyperlinks}. Hyperlinks sind Querverweise auf andere Seiten.
+ \item Durch einen Nebensatz:\\
+  Webseiten enthalten \emph{Hyperlinks}, [dies sind] Querverweise auf andere Seiten.
+ \item Der \gquote{so genannt} Anhang:\\
+  Webseiten enthalten Querverweise, so genannte \emph{hyperlinks}.
+ \item Die \gquote{englische Klammer}:\\
+  Webseiten enthalten Querverweise (engl. \emph{hyperlinks}).
+\end{enumerate}
+\end{Example}
+
+
+\begin{merksatz}
+Wenn möglich vermeide Anglizismen. Ersetze Anglizismen durch eindeutige deutschsprachige
+Übersetzung. Erkläre sperrige Begriffe besser in Sätzen als in einem Wort.
+\end{merksatz}
+
+
+% 
+% \hspace{0pt}\\
+% \begin{Exercise}[title={Anglizismen},difficulty=3,label={ex.anglizismen2}]
+% \Question[title={Finde Erklärungen zu folgenden englischen Begriffen}]\\
+% applet, % kleine Anwendung; spez. eingebettete Funktion in komplexen Anwendungen
+% API, % API, Anwendungsprogramm-Schnittstelle
+% byte code, %
+% clip art, % Sammlung von Grafikbildchen
+% eye tracking, % 
+% test case, % Testumgebung
+% \end{Exercise}
+% \begin{Answer}[ref={ex.anglizismen2}]
+% Applet = kleine Anwendung; spez. eingebettete Funktion in komplexen Anwendungen
+% API = API, Anwendungsprogramm-Schnittstelle;
+% byte code = ???;
+% clip art = Sammlung von Grafikbildchen;
+% eye tracking = Augenverfolgung, Bewegungserfassung der Augen;
+% test case =  % Testumgebung
+% widget = (window + gadget)  Vorrichtung im Fenster, Dingsbums, Komponente
+% \end{Answer}
+
+
+
+\subsection{Tautologien kürzen}
+Tautologie vom griechischem \greek{\tau\alpha\upsilon\tau{}o\lambda{}o\gamma\iota\alpha}
+\gquote{Dasselbe-Sagen}. % \greektext{ταυτολογία}
+
+
+% \hbox{}\par
+%\begin{Exercise}[title={Tautologien},label={ex.tautologien},difficulty=1]
+% \Question[title={Finde weitere Tautologien}]
+% \begin{Answer}[ref={ex.tautologien}]%
+
+\begin{Example}[Tautologien]
+\begin{longtable}{p{.49\textwidth}p{.49\textwidth}}
+binäre Ja-Nein-Abfrage & ersetzbare Platzhalter \\
+unveränderliche Konstante & geschütztes DRM \\
+konstantes Tupel & % in Python: Tupel sind immer konstant
+   duales Zweiersystem \\ %
+neu renoviert & dunkle Ahnungen\\% Gegensatz: Wissen
+dicke Trossen & % Trossen sind immer dick, ansonsten wäre es Seile
+   seltene Raritäten \\
+wimmelnder Überfluss & schwere Verwüstungen\\%
+restlos überzeugt & steile Felswände\\% Wenn die Wand aufhört steil zu sein, wird sie zum Hang
+weißer Nebel & flache Kuppen\\% ansonsten wären es Spitzen
+\end{longtable}
+\end{Example}
+
+Tautologien verwirren mehr als dass sie aufklären. Entfernt das Adjektiv
+vor dem Hauptwort, das bringt Klarheit. Das heißt, es reicht völlig aus von
+\emph{Konstante} zu schreiben ohne \emph{unveränderlich}.
+
+%
+\section{Sätze bilden}
+\begin{epigraph}{Wolf Schneider}
+Die dicke Muse des deutschen Satzes.
+\end{epigraph}
+
+
+%\subsection{Im Präsens schreiben}
+%FIXME: Mehr dazu schreiben.\\
+%Schreibt Projektarbeiten in der Gegenwart (Präsens).
+
+\subsection{Verben suchen}
+\begin{epigraph}{Faust I, Studierzimmer}
+Am Anfang war die Tat.
+\end{epigraph}
+
+\noindent Verben sind \gquote{Tun- oder Tatwörter}, sie beschreiben eine Aktion. Jedoch gibt
+es gute und schlechte Verben. Schlechte Verben sind folgende:
+
+\begin{description}
+\item[Luftwörter:] erfolgen, bewirken, bewerkstelligen;
+\item[Spreizwörter:] beinhalten, vergegenwärtigen;
+\item[tote Verben:] sich befinden, liegen, gehören, [es gibt];
+\item[Blähverben:] aufweisen, weilen;
+\end{description}
+
+Warum du besser einen Satz mit Verben schreiben solltest als mit Hauptwörtern
+(Substantive) zeigt folgendes Beispiel:
+
+
+\begin{Example}[Substantiv-Stil]
+Das Beißen der Briefträger erfolgt durch Hunde.\\
+Die Installation des Programms erfolgt durch Einlegen der CD.
+\end{Example}
+
+Das sagt kein Mensch! Und doch wird es häufig geschrieben. Ersetze das
+Hauptwort (das Beißen, die Installation) durch ein Verb (beißen, installieren):
+
+\begin{Example}[Diesmal ohne Substantiv]
+Hunde beißen Briefträger. Oder: Briefträger werden von Hunden gebissen.\\
+Installieren Sie das Programm, indem Sie die CD [in Ihr Laufwerk] einlegen.
+\end{Example}
+
+
+\subsection{Verbklammern auflösen}
+Zusammengesetzte Verben sind \gquote{an-zeigen}, \gquote{ein-binden} und noch weitere. 
+Das Deutsche hat die unangenehme Eigenschaft, dass sich solche Verben auseinanderreißen
+lassen. Dies führt zu einer so genannten \emph{Verbklammer}: Ein Teil des Wortes steht
+am Anfang und ein anderer Teil am Ende des Satzes.
+
+\begin{Example}[Verbklammer]
+Fur den Arbeitgeber \textbf{fallen} außer Personalkosten keine weiteren Kosten \textbf{an}.\\
+Das Dialogfenster \textbf{zeigt} eine Vielzahl von unterschiedlichen Optionen \textbf{an}.\\
+Programm X \textbf{bindet} das Gerät unter einem neuen Namen \textbf{ein}.
+\end{Example}
+
+Wenn zwischen ersten und zweitem Teil zuviele Wörter enthalten sind, solltest du die
+Verbklammer auflösen. Wieviele Wörter sind \emph{zuviele}? Falls noch Nebensätze eingefügt
+wurden oder du mehr als 6 Wörter zwischen den Verbteilen hast.
+
+Manchmal musst du die Sätze etwas umformulieren. Die vorigen Beispiele sehen verbessert so aus:
+
+\begin{Example}[Aufgelöste Verbklammer]
+Für den Arbeitgeber \textbf{entstehen} außer Personalkosten keine weiteren Kosten.\\
+Das Dialogfenster \textbf{zeigt} eine Vielzahl von unterschiedlichen Optionen.\\
+Wenn Programm X das Gerät \textbf{einbindet}, ist es unter einem neuen Namen sichtbar.
+\end{Example}
+
+
+\subsection{Modalverben eindeutig verwenden}
+Dürfen, können, mögen, müssen, sollen, wollen sind Modalverben.
+Das Wort \emph{modal} kommt von lateinisch \gquote{Art und Weise}. Mit den
+Modalverben drückst du deine Einstellung und Wertung gegenüber dem im Verb
+Ausgesagten aus.
+
+Markiere eindeutig, ob es sich lediglich um eine Empfehlung oder ein 
+unumgängliches Muss handelt.
+
+% \let\PBS=\PreserveBackslash
+% \begin{longtable}{lp{.3\textwidth}p{.4\textwidth}}
+% Modalverb & Zweck & Beispiel \\
+% \hline
+% dürfen & Erlaubnis/Berechtigung & \raggedright
+%  Die Maschine darf nur von ausgebildeten Technikern gewartet werden. \\
+%  & Vermutung & \raggedright{} Der rote Schalter dürfte der richtige sein.\\
+% \hline
+% \pagebreak[3]
+% können & Möglichkeit/Erlaubnis & \raggedright Der Monteur kann in zwei Stunden
+% mit der Reparatur beginnen. \\
+%  & Fähigkeit & Der Programmierer kann verschiedene Sprachen.\\
+%  & Aufforderung & Kannst du mir schnell helfen?\\
+% \hline
+% müssen & zwingende Notwendigkeit & Das muss heute noch gemacht werden.\\
+%        & Aufforderung/Befehl & \raggedright Sie müssen die Arbeit unterbrechen,
+% wenn das Alarmsignal ertönt.\\
+%        & sichere Vermutung & Der Mann im weißen Kittel muss der
+% Projektleiter sein. \\
+% \hline
+% sollen & \raggedright Auftrag, Pflicht, nicht zwingende Notwendigkeit 
+%   & \raggedright Die Maschine soll regelmäßig gewartet werden.\\
+%        & Behauptung & Das sollen die Leistungsmerkmale der
+% Oberfläche sein, das wir entwickeln.\\
+% \end{longtable}
+
+
+\begin{description}
+\item[dürfen = Erlaubnis/Berechtigung:]\hspace{0pt}\\ 
+Die Maschine darf nur von ausgebildeten Technikern gewartet werden.
+
+\item[dürfen = Vermutung:]\hspace{0pt}\\ 
+Der rote Schalter dürfte der richtige sein.
+
+\item[können = Möglichkeit/Erlaubnis:]\hspace{0pt}\\ 
+Der Monteur kann in zwei Stunden mit der Reparatur beginnen.
+
+\item[können = Fähigkeit:]\hspace{0pt}\\ 
+Der Programmierer kann verschiedene Sprachen.
+
+\item[können = Vemutung:]\hspace{0pt}\\ 
+Das kann doch nicht dein Ernst sein!
+
+\item[können = Aufforderung:]\hspace{0pt}\\ 
+Kannst du mir schnell helfen?
+
+\item[müssen = Zwingende Notwendigkeit:]\hspace{0pt}\\
+Das muss heute noch gemacht werden.
+
+\item[müssen = Aufforderung/Befehl:]\hspace{0pt}\\
+Sie müssen die Arbeit unterbrechen, wenn das Alarmsignal ertönt.
+
+\item[müssen = Sichere Vermutung:]\hspace{0pt}\\
+Der Mann im weißen Kittel muss der Projektleiter sein.
+
+\item[sollen = Auftrag/Pflicht/nicht zwingende Notwendigkeit:]\hspace{0pt}\\
+Die Maschine soll regel\-mäßig gewartet werden.
+
+\item[sollen = Behauptung:]\hspace{0pt}\\
+Das sollen die Leistungsmerkmale der Oberfläche sein, das wir entwickeln.
+\end{description}
+
+
+%% FIXME: Beispiel einfügen?
+
+
+
+\subsection{Passiv sinnvoll nutzen}
+Der Satz \gquote{Ihre Daten werden gelöscht} verschweigt, \emph{wer} dies tut.
+Passivsätze sind problematisch, weil:
+
+\begin{itemize}
+ \item Leser länger brauchen, um einen Satz im Passiv zu verstehen,
+ \item Leser den Passivsatz dafür leichter missverstehen,
+ \item wichtige Informationen im Passiv in den Hintergrund treten oder völlig
+ verschwinden.
+\end{itemize}
+
+Die folgenden Beispiele zeigen Sätzen im Passiv:
+
+\begin{Example}[Sätze im Passiv]
+Das Programm wird installiert. \emph{Von wem? Automatisch?}\\
+Die Gebühren für die Lizenz mussten erhöht werden. \emph{Wer hat?}\\
+Aus Sicherheitsgründen werden die Daten gelöscht. \emph{Warum? Wer?} \\
+Im Fenster wird auf Ok geklickt, um den Prozess zu starten. \emph{Wer?}\\
+Mitarbeiter wurden freigesetzt. \emph{Aha, von wem?} \\
+Signale werden übertragen. \emph{Wodurch?}  \\
+Produktionskapazitäten werden stillgelegt. \emph{Von wem?}
+\end{Example}
+
+Nenne Ross und Reiter und formuliere um ins Aktiv:
+
+\begin{Example}[Vorige Sätze im Aktiv]
+Installieren Sie das Programm.\\
+Wir/Die Geschäftsleitung/\ldots\ mussten die Gebühren erhöhen.\\
+Das Programm löscht die Daten aus Sicherheitsgründen.\\ 
+Klicken Sie auf OK um den Prozess zu starten.\\
+Wir/Die Geschäftsleitung/\ldots\ haben Mitarbeiter entlassen.\\
+Der Transmitter überträgt Signale.\\
+Firma X musste Produktionskapazitäten stilllegen, weil\ldots
+\end{Example}
+
+
+Während in einem Aktivsatz das Subjekt wichtig ist, steht im Passivsatz die 
+Handlung im Vordergrund. Passivsätze sind zulässig, wenn:
+
+\begin{itemize}
+ \item Die handelnde Person keinen interessiert
+ (\gquote{Das Museum wird um 18\,Uhr geschlossen.})
+ \item Die handelnde Person unbekannt ist 
+(\gquote{Neujahr wird überall gefeiert.}, \gquote{Das Haus wurde renoviert.})
+ \item Aus politischen Gründen die Person verschwiegen werden soll 
+(\gquote{Fehler wurden gemacht.})
+ \item Die Handlung im Vordergrund stehen soll.
+\end{itemize}
+
+
+
+% \subsection{Vereinfachungen suchen}
+% \gquote{Nennen Sie die Absatzwege im Gartenbau.} ---
+% \gquote{Wo kann der Gärtner seine Ware verkaufen?}
+% 
+% \gquote{Freisetzen von Rationalisierungspotentialen im Dienstleistungsbereich} ---
+% \gquote{Kündigung von Putzfrauen}
+
+
+\subsection{Einschübe sprengen}
+Schachtelsätze sind vergleichbar mit Funktionen, die andere Funktionen aufrufen.
+Bei mehr als zwei Ebenen haben die meisten Leser Probleme.
+
+\begin{Example}[Aus der Chemie]\label{exa.chemie}
+In seiner natürlichen Form ist molekularer Stickstoff, der aus zwei 
+Stickstoff-Atomen, die von einer Dreifach-Bindung zusammengehalten 
+werden, besteht, eines der stabilsten Moleküle auf der Erde.
+\end{Example}
+
+Der vorige Satz hat drei Ebenen/Einschübe:
+
+\begin{enumerate}
+\item In seiner natürlichen Form ist molekularer Stickstoff [...] eines 
+ der stabilsten Moleküle auf der Erde.
+\item ... der aus zwei Stickstoff-Atomen [...] besteht ...
+\item ... die von einer Dreifach-Bindung zusammengehalten werden ...
+\end{enumerate}
+
+Beispiel~\ref{exa.chemie} enthält zuviel Informationen. Es kostet Mühe, die
+verschiedenen Ebenen zu erkennen und richtig zuzuordnen. Besser ist es, den
+langen Satz in mehrere kurze Sätze aufzuteilen:
+
+\begin{Example}[Verbesserte Version]
+In seiner natürlichen Form ist molekularer Stickstoff eines der stabilsten
+Moleküle auf der Erde. Er besteht aus zwei Stickstoff-Atomen, die
+von einer Dreifach-Bindung zusammengehalten werden.
+\end{Example}
+
+Juristen sind die furchtbarsten Sprachpanscher wie folgendes Beispiel zeigt:
+
+% \paragraph{}
+\begin{Example}[Negativbeispiel aus dem Bürgerlichen Gesetzbuch]
+Ist eine Willenserklärung nach §118 nichtig oder auf Grund der
+§§119, 120 angefochten, so hat der Erklärende, wenn die Erklärung
+einen anderen gegenüber abzugeben war, diesem, andernfalls jedem
+% Dritten den Schaden zu ersetzen, den der andere oder der Dritte
+dadurch erleidet, dass er auf die Gültigkeit der Erklärungen
+vertraut, jedoch nicht über den Betrag des Interesses hinaus,
+welches der andere oder der Dritte an der Gültigkeit der Erklärungen
+hat. (§112, Abs. 1)
+\end{Example}
+
+
+% \section{Der Dreisprung}
+% 
+% \begin{enumerate}
+% \item Sage den Leuten was du Ihnen gleich sagen wirst.
+% \item Sage es Ihnen.
+% \item Sage Ihnen, was du gesagt hast.
+% \end{enumerate}
+
+
+\subsection{Füllwörter streichen}
+Füllwörter \gquote{würzen} den Text. Wie bei jedem Gewürz ist ein Zuviel schädlich
+für den Genuss. Daher lautet die Regel: Streiche möglichst viele dieser
+Wörter. Die folgende Liste stammt von \cite{bib.schneider01}:
+
+\begin{small}
+aber, abermals, allein, allemal, allem Anschein nach, allenfalls, allenthalten,
+allerallerdings, allerdings, allesamt, allzu, also, andauerend, andererseits,
+andernfalls, anscsheinend, an sich, auch, auffallend, aufs Neue, augenscheinlich,
+ausdrücklich, ausgerechnet, ausnahmslos, außerdem, äußerst, beinahe, bei weitem,
+bekanntlich, bereits, besonders, bestenfalls, bestimmt, bloß, dabei,
+dadurch, dafür, dagegen, daher, damals, danach, dann und wann, demgegenüber,
+demgemäß, demnach, denkbar, denn, dennoch, deshalb, des Öfteren, des ungeachtet,
+deswegen, doch, durchaus, durchweg, eben, eigentlich, ein bisschen, einerseits,
+einfach, einige, einigermßaen, einmal, ein wenig, ergo, erheblich, etliche,
+etwa, etwas, fast, folgendermaßen, folglich, förmlich, fortwährend, fraglos,
+freilich, ganz, ganz und gar, gänzlich, gar, gelegentlich, gemeinhin,
+genau, geradezu, gewiss, gewissermaßen, glatt, gleichsam, gleichwohl, 
+glücklicherweise, gottseidank, größtenteils, halt, häufig, hie und da,
+hingegen, hinlänglich, höchst, höchstens, im Allgemeinen, immer, immerhin, 
+immerzu, in der Tat, indessen, in diesem Zusammenhang, infolgedessen,
+insbesondere, inzwischen, irgend, irgendein, irgendjemand, irgendwann,
+irgendwie, irgendwo, ja, je, jedenfalls, jedoch jemals, kaum, keineswegs,
+längst, lediglich, leider, letztlich, manchmal, mehrfach, mehr oder weniger,
+meines Erachtens, meinetwegen, meist, meistens, meistenteils,
+mindestens, mithin, mitunter, möglicherweise, möglichst, nämlich, naturgemäß,
+natürlich, neuerdings, neuerlich, neulich, nichtsdestoweniger, nie, niemals, 
+nun, nur, offenbar, offenkundig, offensichtlich, oft, ohnedies, ohne weiteres,
+ohne Zweifel, partout, plötzlich, praktisch, quasi, recht, reichlich,
+reiflich, relativ, restlos, richtiggehend, rundheraus, rundum, samt und sonders,
+seltsam, schlicht, schlichtweg, schließlich, schlussendlich, schon, sehr,
+selbst, selbstredend, selbstverständlich, selten, seltsamerweise, sicher,
+sicherlich, so, sogar, sonst, sowieso, sowohl als auch, sozusagen, stellenweise,
+stets, trotzdem, überaus, überdies, umständehalber, unbedingt, unerhört, 
+ungefähr, ungemein, ungewöhnlich, ungleich, unglücklicherweise, unlängst,
+unmaßgeblich, unsagbar, unsäglich, unstreitig, unzweifelhaft, vergleichsweise,
+vermutlich, vielfach, vielleicht, voll, vollends, völlig, vollkommen,
+vollständig, voll und gnaz, von neuem, wahrscheinlich, weidlich, weitgehend,
+wenigstens, wieder, wiederum, wirklich, wohl, wohlgemerkt, womöglich,
+ziemlich, zudem, zugegeben, zumeist, zusehends, zuweilen, zweifellos, zweifelsfrei,
+zweifelsohne
+\end{small}
+
+
+\begin{Example}[Füllwörter in einem Text]
+Das Programm funktioniert \emph{höchst} eigenartig. \emph{Denkbar} wäre eine falsche
+Eingabe, \emph{vielleicht} \emph{nur} ein Leerzeichen.
+\end{Example}
+
+Kritikpunkte des vorigen Textes: Der Autor war sich unsicher über die Ursache des 
+Problems. Wenn diese Unklarheiten beseitigt sind, kann der Text wie folgt
+aussehen:
+
+\begin{Example}[Korrektur ohne Füllwörter]
+%Das Programm reagiert falsch, wenn ein Leerzeichen eingegeben wird.\\
+%Besser:
+Wenn ein Leerzeichen eingegeben wird, reagiert das Programm falsch.
+\end{Example}
+
+\begin{merksatz}
+Überprüfe deinen Satz auf überflüssige Füllwörter.
+\end{merksatz}
+
+
+\subsection{Reihenfolge beachten}
+Nach eins folgt zwei. %, auf A folgt B. 
+Häufig wird jedoch zuerst zwei genannt wie im folgenden Beispiel:
+
+\begin{Example}[Falsche Reihenfolge]
+Um die Synchronisation auszulösen, starten Sie zuvor das Programm Foo.
+\end{Example}
+
+Es ist für den Leser wesentlich einfacher, wenn die Reihenfolge umgestellt wird:
+
+\begin{Example}[Korrigierte Reihenfolge]
+Starten Sie das Programm Foo, um die Synchronisation auszulösen.
+\end{Example}
+
+\begin{merksatz}
+Schreibe deine Aufzählungen so, dass die Reihenfolge logisch ist.
+\end{merksatz}
+
+
+\subsection{Nein zum Neinsagen}
+\begin{epigraph}{Joachim Ringelnatz}
+Sicher ist, dass nichts sicher ist. Selbst das nicht.
+\end{epigraph}
+
+Laut einer amerikanischen Untersuchung in Psychology today, 9/1974 braucht der
+Durchschnittsmensch 48 Prozent mehr Zeit, um eine verneinende Satzaussage zu
+verstehen als eine bejahende.
+
+Das Deutsche kennt einige Möglichkeiten nein zu sagen (nach \cite{bib.schneider01}):
+
+\begin{enumerate}
+ \item Verneinung durch Wörter
+\begin{enumerate}
+ \item Direkte Verneinungen: kein, nein, nicht, nichts, nie, niemals, niemand, Null,
+ ohne, weder -- noch, wenig, \ldots
+ \item Integrierte Verneinung: hindern (nicht zulassen), kaputt (nicht funktionsfähig),
+ kaum (nicht genug), knapp (nicht genug), Mangel (das Nichtgenughaben), selten (nicht
+oft genug), zweifeln (nicht glauben), \ldots
+\end{enumerate}
+
+ \item Verneinung durch Silben
+ \begin{enumerate}
+  \item durch Vorsilben: a- (amoralisch), ab- (ablehnen, abnormal), auf- (aufheben =
+abschaffen), aus- (ausbleiben), de- (dementieren), des- (desinifzieren), dis- 
+(disqualifizieren), durch- (durchkreuzen), ein- (einbüßen), ent- (entbehren, entfernen),
+un- (unmäßig), ver- (verbieten), weg- (weglassen), zurück- (zurückweisen)
+ \item durch Nachsilben: -frei (koffeinfrei), -leer (inhaltsleer), -los (arbeitslos)
+ \end{enumerate}
+\end{enumerate}
+
+
+\begin{Example}[Verneinungen in Sätzen]\label{ex.verneinung}
+%\vspace*{-0.5em}
+\begin{enumerate}
+ \item Die FSF klagt über einen \emph{zunehmenden Mangel} an Entwicklern.\\
+ Besser: Die FSF klagt darüber, dass es immer weniger Entwickler gibt.
+
+ \item Es vergeht \emph{kaum} ein Tag, an dem die Organisation \emph{keine} Verletzungen der GPL findet.\\
+ %1. Es vergehen sehr viele Tage, an denen sie eine Verletzung finden.
+ Besser: Jeden Tag findet die Organisation GPL-Verletzungen.
+ %3. An (fast) jedem Tag findet die Organisation GPL-Verletzungen.
+ % \item ... Ein Beispiel? ...
+\end{enumerate}
+\end{Example}
+
+% Wenn in Beispiel~\ref{ex.verneinung} die Verneinung umformuliert wird, lauten die 
+% Sätze wie folgt:
+% 
+% \begin{Example}[Umformulierte Verneinungen in Sätzen]
+% %\vspace*{-0.5em}
+% \begin{enumerate}
+%  \item 
+% % Die FSF klagt über einen zunehmenden Mangel an Entwicklern.
+% Die FSF klagt darüber, dass es weniger Entwickler gibt.
+%  \item 
+% % Es vergeht kaum ein Tag, an dem die Organisation keine Verletzungen der GPL findet.
+% % Es vergehen sehr viele Tage, an denen sie eine Verletzung finden.
+% Jeden Tag findet die Organisation GPL-Verletzungen.
+%  %3. An (fast) jedem Tag findet die Organisation GPL-Verletzungen.
+%  % \item ... Ein Beispiel? ...
+% \end{enumerate}
+% \end{Example}
+
+
+\begin{merksatz}
+ Schreibe Sätze möglichst in der \gquote{Ja-Form}.
+\end{merksatz}
+
+
+% \begin{quote}
+% Es vergeht kaum ein Tag, an dem die Organisation keine 
+% Verletzungen der GPL finden würde
+% \end{quote}
+
+% \begin{Exercise}[title={Verneinende Satzaussagen},difficulty=2,label={ex.nosentences}]
+% \Question[title={Schreibe folgende Sätze um}]\\
+% Es vergeht kaum ein Tag, an dem die Organisation keine 
+% Verletzungen der GPL finden würde.
+% 
+% Wenn der Rückgabewert ungleich 2 ist, springt die Funktion 
+% 
+% Die Uno klagt über zunehmenden Mangel an Weizen.
+% 
+% \end{Exercise}
+
+%
+%Korrektur:
+%1. Es vergehen sehr viele Tage, an denen sie eine Verletzung finden.
+%2. Jeder Tag werden GPL-Verletzungen gefunden.
+%3. An (fast) jedem Tag findet die Organisation GPL-Verletzungen.
+%
+
+% Nichts genaues weiß man nicht.
+% Null Bock auf gar nichts
+% 
+% Überfluss an Geistesmangel
+% 
+% AIDS-Test positiv!
+
+
+%%
+%% ----------------------------------------------------------
+%%
+\part{Form und Struktur}
+
+\section{Bestandteile einer Projektarbeit}
+Eine Projektarbeit enthält viele Bestandteile wie Kapitel, Abschnitte und Tabellen.
+Zu jedem dieser Bestandteile zeigen die folgenden Unterabschnitte einige Tipps.
+
+\subsection{Titelseite}
+Die Titelseite enthält Titel, Autor, Jahr, Firmenlogo, Berufsbezeichnung 
+bzw.\ Ausbildungsziel und Abgabetermin.
+
+Obwohl es einfach aussieht: Eine gute Titelseite zu gestalten ist schwierig. 
+Eine Empfehlung für eine Titelseite lautet:
+
+\begin{itemize}
+ \item Der Titel ist die wichtigste Information, deshalb sollte er möglichst auffällig sein.
+  Entweder durch Schriftgröße oder Fettschrift.
+ \item Vermeide Textauszeichnungen wie Sperren, zuviel Farbe oder Unterstreichungen.
+ \item Halte dein Logo klein. Übergroße Grafiken lenken vom Titel ab. 
+\end{itemize}
+
+Ein möglicher Aufbau einer Titelseite ist in Abbildung~\ref{fig.titleseite}
+dargestellt.
+
+\begin{figure}[tb]
+ \caption{Aufbau einer Titelseite\label{fig.titleseite}}
+\framebox[.25\linewidth][c]{%
+\begin{minipage}[t]{.5\textwidth}
+%\begin{verbatim}
+\begin{center}
+\hspace{0pt}\\[1.125em]
+
+          Autor\\[2ex]
+
+        Der Titel\\
+       (Untertitel)\\[2ex]
+
+     Ausbildungsziel\\
+      Abgabetermin\\[2ex]
+
+          Logo\\[2ex]
+\hspace{0pt}
+\end{center}
+%\end{verbatim}
+\end{minipage}}
+\end{figure}
+
+
+
+\subsection{Inhaltsverzeichnis}
+Das Inhaltsverzeichnis ist eine Übersicht deiner Projektarbeit, kein Index.
+Aus diesem Grund reichen Einträge für Kapitel und Abschnitt völlig aus.
+Unterabschnitte blähen das Inhaltsverzeichnis unnötig auf.
+Verwende in \LaTeX\ den Befehl \verb!\tableofcontents!.
+
+
+%\subsection{Erklärung}
+% Jede Projektarbeit enthält eine Erklärung, dass du diese Arbeit selbstständig
+% geschrieben hast.
+
+
+
+\subsection{Vorwort}
+In vielen Fällen wird das Vorwort weggelassen. Falls der Platz ausreicht
+findest du folgendes:
+
+\begin{itemize}
+ \item Wenn es passt, schafft ein Zitat die nötige Atmosphäre.
+ \item Typografische Konventionen. Dieser Abschnitt ermöglicht dem Leser
+  einen schnellen Einstieg in deine \gquote{typografische Welt}. 
+% \item Möglicherweise etwas zu dir als Autor. Falls du beispielsweise früher einen
+% Webserver betreut hast und in deiner Projektarbeit dieses Thema bearbeitest.
+ \item Danksagungen. Wer dir bei deiner Projektarbeit geholfen hat.
+\end{itemize}
+
+
+
+\subsection{Die Hauptstruktur}
+Die oberste Struktur einer Projektarbeit ist meistens gleich aufgebaut. 
+Lediglich bei Anhängen sind Variationen möglich. Häufig findet sich der 
+komplette Quellcode dort. Aber auch umfangreichere Hintergründe, die 
+am Anfang störend wären, lassen sich in den Anhang verschieben.
+
+Die erste Hierarchie einer Projektarbeit enthält die folgenden Kapitel:
+
+\begin{description}
+ \item[1. Projektauftrag:] beschreibt das Umfeld, die aktuelle Situation und das Projektziel.
+ \item[2. Projektplanung:] erklärt die Vorbedingungen, Zeiteinteilung, Kosten, Ressourcen u.~ä.
+ \item[3. Projektdurchführung:] betrachtet Ablauf und Implementierung.
+ \item[4. Projektabschluss:] enthält eine Zusammenfassung, Fazit oder Ausblick.
+\end{description}
+
+
+
+\subsection{Abschnitte}
+Abschnitte ordnen den Text eines Kapitels oder Anhangs. Die folgende Liste fasst
+die wichtigsten Punkte zusammen:
+
+\begin{itemize}
+ \item Strukturiere die Projektarbeit mit Abschnitten und Unterabschnitten. 
+ \item Füge zwischen Abschnitt und folgendem Unterabschnitt einen einführenden
+ Text oder eine kurze Zusammenfassung ein.
+ \item Formuliere die Titel von Abschnitten so, dass sie \gquote{parallel} aufgebaut sind.
+ Parallel sind Abschnitte dann, wenn alle gleichartig beginnen. Dies kann mit 
+  einem Verb oder Substantiv sein.
+ \item Vermeide Abschnitte die nur ein oder zwei Sätze enthalten. 
+ \item Fasse mehrere Abschnitte mit wenigen Sätzen in einer Liste zusammen.
+ \item Vermeide Abschnitte die nur einen einsamen Unterabschnitt enthalten.
+\end{itemize}
+
+\subsection{Glossar}
+Ein Glossar, oder Fachwortverzeichnis, ist meist sinnvoll, wenn die Zielgruppe
+unterschiedlich ist oder Begriffe in der Literatur uneinheitlich verwendet 
+werden. Bei uneinheitlichen Begriffen klärt ein Glossar auf, wie der Begriff
+in deiner Projektarbeit zu verstehen ist. Hierzu einige Tipps:
+
+\begin{itemize}
+ \item Verwende ein Glossar, wenn erhebliches Vorwissen vorausgesetzt wird
+oder ein Begriff mit einem Wort schwer zu erklären ist. So kann der Leser im
+ Glossar nachschlagen.
+ \item Sortiere die Begriffe alphabetisch.
+ \item Schreibe deine Erklärungen so, dass möglichst wenig Vorwissen benötigt wird.
+ \item Achte darauf, dass alle Einträge entweder in der Einzahl oder Mehrzahl 
+ geschrieben sind.
+ \item Formatiere das Glossar als Liste, nie als Tabelle mit Linien.
+\end{itemize}
+
+
+\subsection{Literaturverzeichnis}
+Jeder Text baut auf der Arbeit von Anderen auf. Falls du Literatur oder Seiten
+im Web verwendest oder darauf verweist, nenne deine Quellen in einem 
+\emph{Literaturverzeichnis}.
+Beispiel~\ref{exa.biblio} zeigt, wie in \LaTeX{} ein Literaturverzeichnis von 
+Hand eingegeben wird.
+
+\begin{Example}[Manuell gesetztes Literaturverzeichnis in \LaTeX{}]\label{exa.biblio}
+\vspace*{-.75em}
+\begin{verbatim}
+\begin{thebibliography}{baum08}
+ \bibitem[Baum08]{bib.baumert} Andreas Baumert. 
+  \emph{Professionell texten}. 
+  Grundlagen, Tipps und Techniken. 2.~Auflage. dtv 2008. 
+  ISBN 978-3-423-50868-1.
+ % ... Weitere Einträge mit \bibitem[Label]{Citekey}
+\end{thebibliography}
+\end{verbatim}
+\end{Example}
+
+\begin{merksatz}
+Überlege dir ein Schema, damit jeder Eintrag den gleichen Aufbau hat.
+Beispielsweise Autor, Titel, Untertitel, Auflage, Verlag, Jahr, ISBN-Nummer.
+Möglicherweise benötigst du weitere Einträge oder andere sind überflüssig
+(Stichwort Webseite). 
+\end{merksatz}
+
+
+\subsection{Tabellen}
+Tabellen sind ein großartiges Werkzeug, um Daten darzustellen. Achte auf die
+folgenden Punkte:
+
+\begin{itemize}
+ \item Verwende Tabellen um Daten darzustellen, nicht um zweispaltigen Satz zu simulieren.
+ \item Gib jeder Tabelle eine Tabellen\emph{überschrift}.
+ \item Beschrifte jede Spalte.
+ \item Verweise im Text auf die Tabelle.
+ \item Setze Einheiten in einer Spalte als Tabellenfußnote, im Tabellenkopf oder in
+ der Zelle und sei konsistent im gesamten Dokument.
+ \item Achte auf Konsistenz hinsichtlich Linien und Schattierungen.
+ \item Formatiere den Zelleninhalt je nach Anforderung link- oder rechtsbündig, jedoch 
+   \emph{nie} im Blocksatz.
+ \item Formatiere den Tabellenkopf anders als den Rest, beispielsweise fett oder kursiv.
+\end{itemize}
+
+
+\subsection{Abbildungen}
+Eine Abbildung sagt mehr als tausend Worte, lautet ein Sprichwort. Zu Abbildungen
+gibt es folgendes zu sagen:
+
+\begin{itemize}
+ \item Verwende Grafiken nur für Screenshots oder Zeichnungen, nicht für Quellcode.
+  Anders als Grafiken lässt sich Text kopieren und durchsuchen.
+ % Tipp für \LaTeX-Anwender: Empfohlen wird das Paket \latexenv{listing}.
+ % Grund: Text kann später aus PDF nicht mehr kopiert werden, 
+ % Suche funktioniert nicht mehr
+ % Änderungen werden schwieriger
+ % Umbruch
+ \item Gib jeder Abbildung einen Titel \emph{unterhalb} des Bildes.
+ \item Verwende das richtige Format: Bitmaps für Grafiken, Vektorformate für Zeichnungen.
+ \item Wenn die Grafik ein Koordinatensystem hat, beschrifte \emph{immer} die Achsen, 
+ \item Füge bei komplizierten Grafiken eine Legende ein und beschreibe den Zusammenhang 
+      im Text.
+ \item Beschneide die Grafik, wenn nur ein kleiner Teil interessiert. Alternative:
+  Hervorheben durch Kreis oder Rechteck.
+ \item Bevorzuge Grafiken mit größerer Breite als Höhe. Schlanke Grafiken können links
+  oder rechts durch Text aufgefüllt werden, erschweren aber möglicherweise den Umbruch.
+ \item Halte deine Grafiken konsistent hinsichtlich Schriftart, Strichstärke, 
+  Farbe und Aufbau.
+\end{itemize}
+
+
+
+\subsection{Listen}
+Listen sind sehr gut geeignet, um etwas aufzuzählen oder eine Reihenfolge anzugeben. 
+Folgende Hinweise treffen auf Listen zu:
+
+\begin{itemize}
+ \item Beginne die Liste mit einen einleitenden Satz (wie im vorigen Satz gezeigt).
+ \item Verwende eine nummerierte Liste (in \LaTeX\ \latexenv{enumerate}), wenn jeder
+Schritt auf den anderen folgt und nicht ausgetauscht werden kann.
+ \item Verwende eine Aufzählungsliste (in \LaTeX\ \latexenv{itemize}), wenn 
+  es keine Reihenfolge zwischen den Listeneinträgen gibt. Jeder Eintrag kann
+  mit einem anderen vertauscht werden, ohne dass es Probleme gibt.
+ \item Stelle sicher, dass deine Liste minimal zwei Einträge hat.
+ \item Begrenze deine Liste auf maximal 10 Einträge.
+ \item Halte die Listeneinträge \gquote{parallel}, ähnlich wie bei den Abschnitten; 
+  achte auf Einzahl und Mehrzahl.
+ \item Beende die Listeneinträge nur bei ganzen Sätzen mit einem Punkt, nicht
+  wenn sie aus einzelnen Wörtern bestehen.
+\end{itemize}
+
+
+\subsection{Fußnoten}
+Manche Projektarbeiten verwenden Fußnoten. Dazu ist folgendes zu sagen:
+
+\begin{itemize}
+ \item Füge die Fußnote als \emph{Ergänzung}\footnote{Wie in diesem Beispiel gezeigt.}
+  ein, nicht als zusätzliche Erklärung. Fußnoten sind \emph{optionale} Texte, denen der 
+  Leser folgen \emph{kann} aber nicht muss. 
+ \item Aus dem ersten folgt: Definiere Begriffe die der Leser verstehen muss im
+  Text und \emph{nicht} in der Fußnote.
+ \item Setze die Fußnote direkt hinter\footnote{Genau so und ohne Leerzeichen!}
+  den Begriff den du erklären willst.
+ \item Setze die Fußnote hinter das Satzende (Punkt), wenn du den ganzen Satz
+  kommentieren möchtest.\footnote{Ein schöner Satz, nicht wahr? ;-)}
+\end{itemize}
+
+
+
+\section{Typografiesünden}
+\begin{epigraph}{Hans-Peter Willberg}
+ Typografie ist keine Wissenschaft. Typografie ist Handwerk.
+\end{epigraph}
+% \begin{epigraph}{Hans-Peter Willberg}
+%  Man sollte nicht sein ganzes Leben nur mit Buchstaben verbringen,\\
+%  es gibt ja noch die Typografie!
+% \end{epigraph}
+
+
+% \section{Typografie-Sünden vermeiden}
+
+Die häufigsten Sünden sind ziemlich einfach zu vermeiden. Die folgenden
+Abschnitte zeigen, wie du es richtig machst.
+
+\subsection{Zu viele Schriftarten}
+Für Projektarbeiten sind drei Schriftarten völlig ausreichend. Folgende 
+Aufteilung hat sich bewährt:
+
+\begin{itemize}
+ \item Serifenschrift: für gewöhnlich als Textschrift.
+ \item \textsf{Sanserifschrift}: meist für Überschriften
+ \item \verb!Dicktengleiche Schrift! (engl.~\emph{monospace}): für Code, URLs, Dateinamen usw.
+\end{itemize}
+
+
+\subsection{Falsche Anführungszeichen}
+Im Deutschen gibt es zwei Möglichkeiten Anführungszeichen zu verwenden:
+
+\begin{itemize}
+ \item \gquote{Deutsche Anführungszeichen}; Merksatz: 99 unten, 66 oben (Unicode U+201E und U+201C)
+ \item \fquote{Französische Anführungszeichen}
+\end{itemize}
+
+Welche Form du verwendest ist eine Geschmacksfrage, beide sind üblich. Wichtig ist, 
+dass du es im gesamten Dokument \emph{konsistent} machst.
+
+Laut Duden werden Anführungszeichen (auch \gquote{Gänsefüßchen}) in
+folgenden Situationen verwendet:
+
+\begin{itemize}
+ \item wörtliche Rede: Sie sagte: \gquote{Das Programm ist toll.}
+ \item ironische Hervorhebung (so genanntes \gquote{typografisches Zwinkern}):\\
+ Das Programm ist \gquote{ziemlich} stabil.
+ \item für Fremdtexte, Zitate, Buch- und Filmtitel, Musikstücke und Ähnliches:\\
+ Das Buch \gquote{Einführung in XML} stammt von Erik T.\ Ray.
+\end{itemize}
+
+\LaTeX{}-Anwender definieren folgende Befehle:
+
+\begin{verbatim}
+% Deutsche Anführungszeichen:
+\newcommand{\gquote}[1]{\glqq #1\grqq}
+% Französische Anführungszeichen:
+\newcommand{\fquote}[1]{\frqq #1\flqq}
+\end{verbatim}
+
+
+\subsection{Auslassungspunkte}
+Drei Punkte bedeuten, dass etwas ausgelassen worden ist (\LaTeX: \verb!\ldots!, Unicode U+2026):
+
+\begin{Example}[Auslassungspunkte]
+\hspace{0pt}\\[-1em]
+\begin{tabular}{ll}
+ \coltitle{Falsch}  & \coltitle{Richtig} \\
+Verd...!            & Verd\ldots! \\
+Viele... Entwickler & Viele\ldots\ Entwickler\\[1.5em]
+\end{tabular} 
+\end{Example}
+
+
+\subsection{Verstümmelter Gedankenstrich}
+Laut Duden wird der Gedankenstrich dort verwendet, \gquote{wo man in der
+gesprochenen Sprache eine deutliche Pause macht}.
+Meist können Gedankenstriche durch andere Satzzeichen wie Kommas oder 
+Klammern ersetzt werden. Verwende in \LaTeX{} die Zeichen \verb!~--! (Unicode U+2013):
+
+
+\begin{Example}[Gedankenstriche]
+%\hspace{0pt}\\[-1em]
+\begin{tabular}{ll}
+ \coltitle{Falsch}  & \coltitle{Richtig} \\
+XML - das ASCII des Webs. & XML~-- das ASCII des Webs. \\
+\multicolumn{2}{l}{\LaTeX{}-Eingabe: \texttt{XML\textasciitilde-{}- das ASCII des Webs.}}
+\end{tabular}
+\end{Example}
+
+
+\subsection{Verschwenderische Auszeichnungen}
+Text lässt sich auf verschiedene Art auszeichnen:
+
+\begin{itemize}
+ \item als \textbf{Fettschrift}
+ \item \textit{kursiv} (vgl.\ \textit{kursiv} und \textsl{kursiv}; 
+   das Zweite ist nur schräggestellt)
+ \item \textsf{durch Wechsel der Schriftart}
+ \item als \textsc{Kapitälchen}
+ \item \underline{unterstrichen}
+ \item als in GROSSBUCHSTABEN (sog. Versalien)
+ \item g\,e\,s\,p\,e\,r\,r\,t
+ \item in \textcolor{red}{roter Farbe}, als \colorbox{light}{unterlegter Text}
+ \item durch Einrückungen (eher für ganze Sätze geeignet)
+\end{itemize}
+
+In einer Projektarbeit sind gängige Auszeichnungen: \textbf{fett}, \textit{kursiv},
+\textsc{Kapitälchen} oder eine andere \textsf{Schriftart}. Andere Auszeichnungen
+sollten vermieden werden, da sie entweder veraltet sind (unterstreichen), zuviel 
+Aufmerksamkeit erregen (GROSSBUCHSTABEN), stümperhaft aussehen 
+(s\,p\,e\,r\,r\,e\,n) oder Probleme beim Ausdruck ergeben (Farbe).
+
+
+\appendix
+\section{Bewertungsschema}
+Laut Sandra Farrell schaut die IHK auf folgende Punkte:
+
+\begin{itemize}
+ \item Gestaltung des prozessorientierten Projektberichts
+ \item Gliederung angemessen (ersichtliche Gedankenführung, passende Detaillierung)
+ \item Überschriften (aussagekräftig, knapp und dennoch klar)
+ \item Quellennachweis, Anlagenverzeichnis, Abkürzungsverzeichnis, Glossar,
+       Literaturhinweis (Notwendigkeit, qualitativ sinnvolle Angaben)
+ \item Hinweise und Erläuterungen zu den beigefügten praxisbezogenen Unterlagen
+ \item Formale Gestaltung (Lesbarkeit, Randgestaltung, Zeilenabstände, Seitenangaben,
+       Schriftart, durchgehende übersichtliche Nummerierung, Visualisierungen\ldots)
+ \item Sprachliche Gestaltung (sachliche und flüssige Sprache, Rechtschreibung,
+       Verständlichkeit)
+\end{itemize}
+
+
+
+\section{Abschließende Tipps/Zusammenfassung}
+Folgender Ablauf hat sich bei mir bewährt:
+
+\begin{enumerate}
+ \item Lies deinen Text laut. Dadurch erkennst du Probleme in deinem Text.
+ \item Streiche Füllwörter und überflüssige Adjektive. 
+ \item Streiche alle Stellen an, die seltsam klingen oder dir nicht gefallen.
+ \item Prüfe den logischen und \gquote{dramaturgischen}  Ablauf.
+% \item 
+ \item Überarbeite alle angestrichenen Stellen.
+ \item Lass Andere deinen Text lesen.
+ \item Überarbeite die Passagen, die anderen Lesern missfallen haben.
+ \item Lies nochmals laut vor.
+ \item Lass den Text einige Tage liegen und wiederhole die Schritte bei Bedarf.
+\end{enumerate}
+
+
+
+
+%%
+%% Literaturverzeichnis
+%%
+\begin{thebibliography}{baum08}
+ \bibitem[Baum08]{bib.baumert} Andreas Baumert. \emph{Professionell texten}. Grundlagen, Tipps und
+Techniken. 2.~Auflage. dtv 2008. ISBN 978-3-423-50868-1.
+ \bibitem[Ros05]{bib.rosenberg} Barry J.\ Rosenberg. 
+\emph{Spring into Technical Writing for Engineers and Scientists}.
+Addison-Wesley 2005. ISBN 0-13-149863-0.
+ \bibitem[Schul05]{bib.schulze} Hans Herbert Schulze. \emph{Computer-Englisch}.
+Ein englisch-deutsches und deutsch-englisches 
+Fachwörterbuch. rororo 2005. ISBN 3-499-61260-7.
+ \bibitem[Schn01]{bib.schneider01} Wolf Schneider. \emph{Deutsch für Profis}.
+Wege zum guten Stil. Mosaik bei Goldmann 2001. ISBN 3-442-16175-4.
+ \bibitem[Schn05]{bib.schneider05} Wolf Schneider. \emph{Deutsch für Kenner}.
+Die neue Stilkunde. Piper Verlag 2005. ISBN 3-492-24461-0.
+ \bibitem[Schn06]{bib.schneider06} Wolf Schneider. \emph{Wörter machen Leute}.
+Magie und Macht der Sprache. Piper Verlag 2006. ISBN 3-492-20479-1.
+\end{thebibliography}
+
+%\appendix
+
+\end{document}
+\endinput
+
+Dank der redaktionseigenen Glaskugel präsentiert heise Security schon jetzt und 
+wie immer exklusiv den ultimativen Jahresrückblick auf das vor uns liegende Jahr 2010.
+
+Unwort des Jahres 2009
+http://www.welt.de/kultur/article5893478/Das-Unwort-des-Jahres-2009-steht-fest.html

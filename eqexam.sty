@@ -1,0 +1,1755 @@
+%%
+%% This is file `eqexam.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% eqexam.dtx  (with options: `copyright,package')
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% eqExam.sty package,             2005-02-05           %%
+%% Copyright (C) 2005  D. P. Story                      %%
+%%   dpstory@uakron.edu                                 %%
+%%                                                      %%
+%% This program can redistributed and/or modified under %%
+%% the terms of the LaTeX Project Public License        %%
+%% Distributed from CTAN archives in directory          %%
+%% macros/latex/base/lppl.txt; either version 1 of the  %%
+%% License, or (at your option) any later version.      %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{eqexam}
+ [2009/09/28 v1.9a An Exam Construction Package (dps)]
+\usepackage{keyval}
+\DeclareOption{myconfig}{\AtEndOfPackage{\eqemyconfig}}
+\DeclareOption{myconfigi}{\AtEndOfPackage{\eqemyconfigi}}
+\DeclareOption{myconfigii}{\AtEndOfPackage{\eqemyconfigii}}
+\DeclareOption{pointsonleft}{\AtEndOfPackage{\PointsOnLeft}}
+\DeclareOption{pointsonright}{\AtEndOfPackage{\PointsOnRight}}
+\DeclareOption{nopoints}{\AtEndOfPackage{\NoPoints}}
+\DeclareOption{totalsonleft}{\AtEndOfPackage{\TotalsOnLeft}}
+\DeclareOption{totalsonright}{\AtEndOfPackage{\TotalsOnRight}}
+\DeclareOption{pointsonboth}{\AtEndOfPackage{\PointsOnBothSides}}
+\DeclareOption{nototals}{\AtEndOfPackage{\NoTotals}}
+\DeclareOption{noparttotals}{\AtEndOfPackage{\let\eq@parttotals=n}}
+\DeclareOption{noseparationrule}{%
+    \AtEndOfPackage{\let\separationrule\relax}}
+\DeclareOption{nosummarytotals}{\let\eq@nosummarytotals=y}
+\DeclareOption{coverpage}{\def\eqex@coverpage{\eqexcoverpage}}
+\DeclareOption{nospacetowork}{%
+    \AtEndOfPackage{\let\eq@insertverticalspace=n}}
+\newif\ifanswerkey \answerkeyfalse
+\DeclareOption{answerkey}{\answerkeytrue\eq@proofingtrue
+    \eq@solutionsaftertrue}
+\DeclareOption{useforms}{\AtEndOfPackage{\def\sqstar{*}}}
+\DeclareOption{online}{\let\eq@online=y\ExecuteOptions{links}}
+\DeclareOption{pdf}{\let\load@web=y}
+\DeclareOption{links}{\let\load@web=y\let\load@exerquiz=y}
+\DeclareOption{email}{\let\use@email=y\ExecuteOptions{online}}
+\newif\ifeqobeylocalversion\eqobeylocalversionfalse
+\DeclareOption{obeylocalversions}{\eqobeylocalversiontrue}
+\DeclareOption{usexkv}{\let\eq@usexkeys=y}
+\let\eq@usexkeys=n
+\DeclareOption{allowrandomize}{\AtEndOfPackage{\inputRandomizeChoices}}
+\def\inputRandomizeChoices{\InputIfFileExists{aebrandom.def}
+    {\typeout{inputting aebrandom.def}}{cannot find aebrandom.def}}
+\let\eq@online=n
+\let\use@email=n
+\let\load@web=n
+\let\load@exerquiz=n
+\def\sqstar{}
+\def\sqLinks{\def\sqstar{}}
+\def\sqForms{\def\sqstar{*}}
+\def\NoSpaceToWork{\let\eq@insertverticalspace=n}
+\def\SpaceToWork{\let\eq@insertverticalspace=y}
+\let\eq@nototals=n
+\let\eq@nosummarytotals=n
+\let\eq@parttotals=y
+\let\eqx@separationrule=y
+\let\eq@insertverticalspace=y
+\let\eqex@coverpage=\relax
+\def\@reportpoints{0}
+\let\marginpoints=\@empty
+\let\totalsbox=\hfil
+\DeclareOption{forpaper}{\eqforpapertrue
+    \PassOptionsToPackage{monochrome}{\eq@ColorPackage}}
+\DeclareOption{forcolorpaper}{\eqforpapertrue}  % for print
+\DeclareOption{preview}{\previewtrue}
+\DeclareOption{nosolutions}{\eq@nolinktrue\eq@nosolutionstrue}
+\DeclareOption{nohiddensolutions}{\eq@globalshowsolutionstrue}
+\DeclareOption{noHiddensolutions}%
+    {\eq@globalshowsolutionstrue\AtBeginDocument{\def\Hidesymbol{h}}}
+\DeclareOption{solutionsafter}{\eq@solutionsaftertrue}
+\DeclareOption{solutionsonly}{\solutionsonlytrue\answerkeytrue
+    \AtEndOfPackage{\therearesolutionstrue\let\exerSolnsHeadnToc\relax}}
+\DeclareOption{proofing}{\eq@proofingtrue}
+\newif\ifaebshowgrayletters\aebshowgraylettersfalse
+\DeclareOption{showgrayletters}%
+    {\AtEndOfPackage{\aebshowgrayletterstrue}}
+\IfFileExists{xcolor.sty}%
+{\def\eq@ColorPackage{xcolor}\PassOptionsToPackage{xcolor}{table}}
+{\def\eq@ColorPackage{color}}
+\DeclareOption{noxcolor}{\def\eq@ColorPackage{color}}
+\def\eq@drivernum{5}
+\def\eqDriverName{dvipsone}
+\DeclareOption{dvipsone}{\def\eq@drivernum{0}\def\eqDriverName{dvipsone}
+    \PassOptionsToPackage{\eq@ColorPackage}{dvipsone}}
+\DeclareOption{dvips}{\def\eq@drivernum{0}\def\eqDriverName{dvips}
+    \PassOptionsToPackage{\eq@ColorPackage}{dvips}}
+\DeclareOption{pdftex}{\def\eq@drivernum{1}\def\eqDriverName{pdftex}
+    \PassOptionsToPackage{\eq@ColorPackage}{pdftex}}
+\DeclareOption{dvipdfm}{\def\eq@drivernum{2}\def\eqDriverName{dvipdfm}
+    \PassOptionsToPackage{\eq@ColorPackage}{dvipdfm}}
+\DeclareOption{textures}{\def\eq@drivernum{3}\def\eqDriverName{textures}
+    \PassOptionsToPackage{\eq@ColorPackage}{textures}}
+\DeclareOption*{\PassOptionsToPackage{\CurrentOption}{\eq@ColorPackage}}
+\@ifpackageloaded{xcolor}%
+{%
+    \@ifpackagelater{xcolor}{2004/07/04}{}
+    {%
+    \PackageError{eqexan}{%
+    *************************************************\MessageBreak
+    * Your Version of `xcolor.sty' is too old!\MessageBreak
+    * You need the version from 2004/07/04 or newer\MessageBreak
+    * or use: \string\usepackage[noxcolor]{eqexam}\MessageBreak
+    * or \string\documentclass[noxcolor]{article}\MessageBreak
+    *************************************************}{}%
+    }%
+}{}
+\newif\ifeq@solutionsafter \eq@solutionsafterfalse
+\newif\ifsolutionsonly\solutionsonlyfalse
+\newif\ifeq@hidesolution \eq@hidesolutionfalse
+\newif\ifeq@globalshowsolutions \eq@globalshowsolutionsfalse
+\newif\ifeq@nosolutions \eq@nosolutionsfalse
+\newif\ifeq@proofing \eq@proofingfalse
+\newif\ifeq@nolink \eq@nolinkfalse
+\newif\ifpreview \previewfalse
+\newif\ifeqforpaper \eqforpaperfalse
+\def\eqemyconfig{\InputIfFileExists{eqexam.cfg}{}{}}
+\def\eqemyconfigi{\InputIfFileExists{eqexami.cfg}{}{}}
+\def\eqemyconfigii{\InputIfFileExists{eqexamii.cfg}{}{}}
+\InputIfFileExists{web.cfg}{}{}
+\InputIfFileExists{eqecus.opt}{}{}
+\ProcessOptions
+\let\savedeq@online\eq@online
+\let\savedifeq@solutionsafter\ifeq@solutionsafter
+\let\savedifeq@hidesolution\ifeq@hidesolution
+\let\savedifeq@globalshowsolutions\ifeq@globalshowsolutions
+\let\savedifeq@nosolutions\ifeq@nosolutions
+\let\savedifeq@proofing\ifeq@proofing
+\let\savedifeq@nolink\ifeq@nolink
+\let\savedifpreview\ifpreview
+\let\savedifeqforpaper\ifeqforpaper
+\let\ifnosolutions\ifeq@nosolutions
+\RequirePackage{amstext,amssymb}
+\RequirePackage{comment}
+\@ifpackageloaded{web}{\let\load@web=y}
+{%
+    \ifx\load@web y
+        \ifnum\eq@drivernum=5
+            \PackageError{eqexam}{****You have not selected a driver %
+                for eqExam****}{Specify dvipsone, dvips, pdftex, %
+                dvipdfm or textures in option list.}
+        \fi
+        \RequirePackage[\eqDriverName]{web}
+        \edef\@pdfcreator{\@pdfcreator, The eqExam Package}
+
+    \fi
+}
+\@ifpackageloaded{exerquiz}{\let\load@exerquiz=y}
+{%
+    \ifx\load@exerquiz y
+        \RequirePackage[nodljs]{exerquiz}[2005/1/23]
+        \let\importdljs=y
+        \let\execjs=y
+    \fi
+}
+\def\eqDvipsone{dvipsone}
+\ifx\eqDriverName\eqDvipsone
+\@ifpackageloaded{hyperref}
+    {\renewcommand\@pdfviewparams{ null null null}}{}
+\fi
+\let\eq@online\savedeq@online
+\let\ifeq@solutionsafter\savedifeq@solutionsafter
+\def\ifsolutionsafter{\ifeq@solutionsafter} % user interface
+\let\ifeq@hidesolution\savedifeq@hidesolution
+\let\ifeq@globalshowsolutions\savedifeq@globalshowsolutions
+\let\ifeq@nosolutions\savedifeq@nosolutions
+\let\ifeq@proofing\savedifeq@proofing
+\let\ifeq@nolink\savedifeq@nolink
+\let\ifpreview\savedifpreview
+\let\ifeqforpaper\savedifeqforpaper
+\RequirePackage{\eq@ColorPackage}
+\RequirePackage{calc}
+\RequirePackage{pifont}
+\RequirePackage{verbatim}
+\RequirePackage{multicol}
+\setlength\columnseprule{.4pt}
+\raggedcolumns\multicolsep=3pt
+\setlength{\headsep}{0pt}
+\settowidth{\oddsidemargin}{\normalsize\normalfont\bfseries00.\ }
+\setlength{\evensidemargin}{0pt}
+\setlength{\marginparsep}{11pt}
+\setlength{\marginparwidth}{35pt}
+\setlength{\headheight}{12pt}
+\setlength{\topmargin}{-.5in}
+\setlength{\headsep}{20pt}
+\setlength{\footskip}{\marginparsep}
+\def\eqExamPageLayout
+{%
+    \setlength\textwidth\paperwidth
+    \addtolength{\textwidth}{-2in}
+    \addtolength{\textwidth}{-\oddsidemargin}
+    \setlength\textheight{\paperheight}
+    \addtolength\textheight{-2in}
+    \addtolength\textheight{-\headheight}
+    \addtolength\textheight{-\headsep}
+    \addtolength\textheight{-\topmargin}
+    \addtolength\textheight{-\footskip}
+}
+\eqExamPageLayout
+\newcommand{\ps@eqExamheadings}
+{%
+    \renewcommand{\@oddhead}{%
+    {%
+        \normalfont\normalsize
+        \ifnum\value{page}=1 \hfil
+        \else
+            \ifx\eqex@coverpage\relax
+                \eqExamRunHead
+            \else
+                \ifnum\value{page}=2 \hfil
+                \else
+                    \eqExamRunHead
+                \fi
+            \fi
+        \fi
+    }%
+}
+\renewcommand{\@evenhead}{\@oddhead}
+\renewcommand{\@oddfoot}{\settotalsbox}
+\renewcommand{\@evenfoot}{\@oddfoot}}
+\raggedbottom
+\newcounter{eqpointsofar}
+\newcounter{eqpointsthispage}
+\newcounter{eq@numparts}
+\newcounter{eq@count}
+\newtoks\partNames \partNames={}
+\newlength{\eq@tmplengthA}
+\newbox{\eq@pointbox}
+\newlength{\eq@pointboxtotalheight}
+\newlength{\eqetmplengtha}
+\newlength{\eqetmplengthb}
+\def\eqbothmargins#1#2{\eqleftmargin{#1}{#2}\eqrightmarginbox{#1}{#2}}
+\def\PointsOnLeft{\def\@reportpoints{1}\let\marginpoints=\eqleftmargin}
+\def\PointsOnRight{\def\@reportpoints{2}\relax
+    \let\marginpoints=\eqrightmarginbox}
+\def\PointsOnBothSides{\def\@reportpoints{3}\relax
+    \let\marginpoints=\eqbothmargins}
+\def\NoPoints{\def\@reporttotals{0}\let\totalsbox=\hfil
+    \let\marginpoints=\@empty\let\eq@nosummarytotals=y}
+\def\TotalsOnLeft{\def\@reporttotals{1}\def\totalsbox{\totalsboxleft}}
+\def\TotalsOnRight{\def\@reporttotals{2}\def\totalsbox{\totalsboxright}}
+\def\NoTotals{\def\@reporttotals{0}\let\totalsbox=\hfil}
+\def\eoeTotalOff{\let\eq@parttotals=n}
+\def\eoeTotalOn{\let\eq@parttotals=y}
+\def\separationruleOn{\let\eqx@separationrule=y}
+\def\separationruleOff{\let\eqx@separationrule=n}
+\def\encloseProblemsWith#1{\ifsolutionsonly
+    \excludecomment{#1}\else
+    \includecomment{#1}\fi
+}
+\providecommand{\proofingsymbolColor}[1]{\def\@proofingsymbolColor{#1}}
+\proofingsymbolColor{red}
+\providecommand{\instructionsColor}[1]{\def\@instructionsColor{#1}}
+\instructionsColor{blue}
+\providecommand{\eqCommentsColor}[1]{\def\@eqCommentsColor{#1}}
+\eqCommentsColor{blue}
+\providecommand{\universityColor}[1]{\def\webuniversity@color{#1}}
+\universityColor{blue}
+\providecommand{\titleColor}[1]{\def\webtitle@color{#1}}
+\titleColor{black}
+\providecommand{\authorColor}[1]{\def\webauthor@color{#1}}
+\authorColor{black}
+\providecommand{\subjectColor}[1]{\def\websubject@color{#1}}
+\subjectColor{blue}
+\providecommand{\linkcolor}[1]{\def\@linkcolor{#1}}
+\linkcolor{blue}
+\providecommand{\nolinkcolor}[1]{\def\@nolinkcolor{#1}}
+\nolinkcolor{blue}
+\def\examNum#1{\def\nExam{#1}}
+\examNum{1}
+\def\Exam{\ifAB{\eq@VersionAtext}{\eq@VersionBtext}}
+\def\sExam{\ifAB{\eq@shortVersionAtext}{\eq@shortVersionBtext}}
+\def\VersionAtext#1{\def\eq@VersionAtext{#1}}
+\def\VersionBtext#1{\def\eq@VersionBtext{#1}}
+\def\shortVersionAtext#1{\def\eq@shortVersionAtext{#1}}
+\def\shortVersionBtext#1{\def\eq@shortVersionBtext{#1}}
+\VersionAtext{Exam~\nExam--Version A}
+\VersionBtext{Exam~\nExam--Version B}
+\shortVersionAtext{Exam~\nExam A}
+\shortVersionBtext{Exam~\nExam B}
+\newtoks\eqtemptokena
+\newtoks\eqtemptokenb
+\def\numVersions#1{\ifnum#1>26\def\eq@nVersions{26}%
+    \PackageWarning{eqexam}{The value of \string\numVersions is too
+    large. \MessageBreak Choose a natural number less than 27.}
+    \else\def\eq@nVersions{#1}\fi}
+\def\longTitleText
+{%
+    \setcounter{eq@count}{0}
+    \eqtemptokena={}
+    \let\endtitleMarker\endlongTitleText
+    \@gatherTitleText{\Exam}
+}
+\def\endlongTitleText{l}
+\def\shortTitleText
+{%
+    \setcounter{eq@count}{0}
+    \eqtemptokena={}
+    \let\endtitleMarker\endshortTitleText
+    \@gatherTitleText{\sExam}
+}
+\def\endshortTitleText{s}
+\def\@gatherTitleText#1#2{%
+    \def\eqe@argii{#2}
+    \if\endtitleMarker\eqe@argii
+        \ifnum\value{eq@count}>\eq@nVersions\let\eq@next\relax
+        \else\def\eq@next{\eq@shortTitlesFix{#1}}\fi
+    \else
+    \stepcounter{eq@count}
+        \eqtemptokenb=\expandafter{#2}
+        \xdef#1{\the\eqtemptokena\expandafter\noexpand
+        \csname v\Alph{eq@count}\endcsname{\the\eqtemptokenb}}
+        \xdef\sExam{\the\eqtemptokena\expandafter\noexpand
+        \csname v\Alph{eq@count}\endcsname{\the\eqtemptokenb}}
+        \eqtemptokena=\expandafter{#1}
+        \ifnum\value{eq@count}<\eq@nVersions
+            \def\eq@next{\@gatherTitleText{#1}}%
+        \else
+            \def\eq@next{%
+                \if\endtitleMarker\endlongTitleText
+                    \expandafter\eqe@absorbTokensLong
+                \else
+                    \expandafter\eqe@absorbTokensShort
+                \fi
+            }%
+        \fi
+    \fi
+    \eq@next
+}
+\long\def\eqe@absorbTokensLong#1\endlongTitleText{}
+\long\def\eqe@absorbTokensShort#1\endshortTitleText{}
+\def\eq@shortTitlesFix#1{%
+    \PackageWarning{eqexam}{You have defined an insufficient number
+    of titles for the number of versions declared in
+    \string\numVersions. Please fix the problem}%
+    \stepcounter{eq@count}%
+    \if\endtitleMarker\endlongTitleText
+        \edef\eqe@tmp{\noexpand\@gatherTitleText{\noexpand#1}
+            {??---Title \# \the\value{eq@count}---??}%
+            \noexpand\endlongTitleText}
+    \else
+        \edef\eqe@tmp{\noexpand\@gatherTitleText{\noexpand#1}
+            {T\#\the\value{eq@count}??}\noexpand\endshortTitleText}
+    \fi
+    \addtocounter{eq@count}{-1}%
+    \eqe@tmp
+}
+\def\ifAB#1#2{\if\eq@selectedVersion A#1%
+    \else\if\eq@selectedVersion B#2%
+\fi\fi}
+\def\eq@replaceToken#1{#1}
+\newif\ifeqglobalversion \eqglobalversionfalse
+\newif\ifeqlocalversion \eqlocalversionfalse
+\newif\if@templocalversion \@templocalversionfalse
+\def\eqe@initializeMultiVersions{%
+    \let\save@message\message\let\message\@gobble
+    \@tfor\eqe@tmp:=ABCDEFGHIJKLMNOPQRSTUVWXYZ\do{%
+        \expandafter\let\csname v\eqe@tmp\endcsname\@gobble
+        \expandafter\excludecomment\expandafter{ver\eqe@tmp}%
+        \expandafter\let\csname Afterver\eqe@tmp Comment\endcsname\relax
+    }\let\message\save@message
+}
+\AtBeginDocument{\let\eqe@initializeMultiVersions\relax}
+\def\forVersion#1%
+{%
+    \eqe@initializeMultiVersions
+    \global\eqglobalversiontrue
+    \setcounter{eq@count}{0}
+    \uppercase{\def\eq@selectedVersion{#1}}
+    \@ifundefined{eq@nVersions}{\PackageInfo{eqexam}{%
+        \string\numVersions\space has not been declared, \MessageBreak
+        taking the number of versions to be 2.}\def\eq@nVersions{2}}{}
+    \loop
+        \stepcounter{eq@count}
+        \expandafter\if\Alph{eq@count}\eq@selectedVersion
+            \xdef\eq@nSelectedVersion{\the\value{eq@count}}%
+            \setcounter{eq@count}{27}\fi
+        \ifnum\value{eq@count}<26\repeat
+        \ifnum\eq@nSelectedVersion >\eq@nVersions
+            \PackageError{eqexam}
+            {The value of \string\forVersion
+             \space(\eq@selectedVersion)\MessageBreak
+             exceeds the value of \string\numVersions\space
+             (\eq@nVersions)}
+            {Decrease the value of \string\forVersion.}
+        \fi
+    \setcounter{eq@count}{0}
+    \let\save@message\message\let\message\@gobble
+    \loop
+        \stepcounter{eq@count}
+        \expandafter
+            \let\csname After\Alph{eq@count}Comment\endcsname\relax
+        \lowercase
+        {%
+            \if#1\alph{eq@count}
+                \expandafter\let
+                \csname v\Alph{eq@count}\endcsname\@empty
+            \else
+                \expandafter\let
+                \csname v\Alph{eq@count}\endcsname\@gobble
+            \fi
+            \if#1\alph{eq@count}
+                \edef\eq@next
+                    {\noexpand\includecomment{ver\Alph{eq@count}}}
+            \else
+                \edef\eq@next
+                    {\noexpand\excludecomment{ver\Alph{eq@count}}}
+            \fi
+        }\eq@next
+        \ifnum\value{eq@count}<\eq@nVersions\repeat
+        \let\message\save@message
+}
+\AtEndOfPackage{\numVersions{26}\forVersion{A}}
+\def\selectVersion#1#2% 1 \le #1 \le #2
+{%
+    \gdef\nLocalSelection{#1}%
+    \gdef\nLocalVersions{#2}%
+    \ifeqglobalversion\ifnum\eq@nSelectedVersion>\nLocalVersions
+        {\count0=\eq@nSelectedVersion \count2=\count0
+         \advance\count0by-1 \divide\count0by\nLocalVersions
+         \multiply\count0by\nLocalVersions \count2=\eq@nSelectedVersion
+         \advance\count2by-\count0
+         \xdef\nLocalSelection{\the\count2\relax}%
+         \ifeqobeylocalversion\else
+            \global\@templocalversiontrue
+            \global\eqobeylocalversiontrue
+         \fi}%
+    \fi\fi
+    \ifeqobeylocalversion
+        \global\eqlocalversiontrue
+        \setcounter{eq@count}{0}
+        \ifx\nLocalSelection\@empty\def\nLocalSelection{1}\fi
+        \let\save@message\message\let\message\@gobble
+        \loop
+            \stepcounter{eq@count}\expandafter
+            \let\csname Afterver\Alph{eq@count}Comment\endcsname\relax
+            \lowercase
+            {%
+                \ifnum\value{eq@count}=\nLocalSelection
+                    \expandafter\let
+                    \csname v\Alph{eq@count}\endcsname\@empty
+                \else
+                    \expandafter\let
+                    \csname v\Alph{eq@count}\endcsname\@gobble
+                \fi
+                \ifnum\value{eq@count}=\nLocalSelection
+                    \edef\eq@next{%
+                        \noexpand\includecomment{ver\Alph{eq@count}}}
+                \else
+                    \edef\eq@next{%
+                        \noexpand\excludecomment{ver\Alph{eq@count}}}
+                \fi
+            }\eq@next
+            \ifnum\value{eq@count}<\nLocalVersions\repeat
+            \let\message\save@message
+    \fi
+    \if@templocalversion\global\eqobeylocalversionfalse\fi
+}
+\@ifpackageloaded{web}{}
+{
+    \def\title{\@ifnextchar[{\@title}{\@title[\@empty]}}
+    \def\@title[#1]#2{\gdef\webtitle{#2}%
+        \ifx#1\@empty\gdef\shortwebtitle{#2}%
+        \else\gdef\shortwebtitle{#1}\fi}
+    \def\subject{\@ifnextchar[{\@subject}{\@subject[\@empty]}}
+    \def\@subject[#1]#2{\gdef\websubject{#2}%
+        \ifx#1\@empty\gdef\shortwebsubject{#2}%
+        \else\gdef\shortwebsubject{#1}\fi}
+    \def\author#1{\gdef\webauthor{#1}}
+    \def\email#1{\gdef\webemail{#1}}
+    \def\keywords#1{\gdef\webkeywords{#1}}
+    \def\university#1{\gdef\webuniversity{#1}}
+    \def\web@versionlabel{Version}
+    \def\web@toc{Table of Contents}
+    \def\web@continued{cont.}
+    \title{}\author{}\email{}\subject{}\keywords{}\university{}
+    \def\optionalpagematter{}
+}
+\def\duedate#1{\def\theduedate{#1}}
+\duedate{}
+\def\duedate#1{\def\theduedate{#1}}
+\duedate{}
+\newcommand\thisterm
+{%
+    \ifnum\the\month<6
+        Spring%
+    \else
+        \ifnum\the\month<8
+            Summer%
+        \else
+            % August or later
+            \ifnum\the\month>8
+            % September or later
+                Fall%
+            \else
+            % month of August
+                \ifnum\the\day>25
+                    Fall%
+                \else
+                    Summer%
+                \fi
+            \fi
+        \fi
+    \fi
+}
+\newcommand\examNameLabel[1]{\gdef\@examNameLabel{#1}}
+\examNameLabel{Name:}
+\newcommand\eqExamName[2][]{\gdef\eq@ExamName{%
+    \bgroup\settowidth\eq@tmplengthA{\@examNameLabel\ }%
+         \@tempdima=#2 \advance\@tempdima by-\eq@tmplengthA
+         \underbar{\makebox[#2][l]{\@examNameLabel}}%
+            \insTxtFieldIdInfo[#1]{\@tempdima}{IdInfo.Name}%
+    \egroup}%
+}
+\eqExamName[\Ff\FfRequired]{2.25in}
+\newcommand\examSIDLabel[1]{\gdef\@examSIDLabel{#1}}
+\examSIDLabel{SID:}
+\newcommand\eqSID[2][]{\gdef\eq@SID{%
+    \bgroup\settowidth\eq@tmplengthA{\@examSIDLabel\ }%
+        \@tempdima=#2 \advance\@tempdima by-\eq@tmplengthA
+        \underbar{\makebox[#2][l]{\@examSIDLabel}}%
+            \insTxtFieldIdInfo[#1]{\@tempdima}{IdInfo.SID}%
+    \egroup}%
+}
+\eqSID[\Ff\FfRequired]{2.25in}
+\newcommand\examEmailLabel[1]{\gdef\@examEmailLabel{#1}}
+\examEmailLabel{Email:}
+\newcommand\eqEmail[2][]{\gdef\eq@Email{%
+    \bgroup\settowidth\eq@tmplengthA{\@examEmailLabel\ }%
+        \@tempdima=#2 \advance\@tempdima by-\eq@tmplengthA
+        \underbar{\makebox[#2][l]{\@examEmailLabel}}%
+            \insTxtFieldIdInfo[#1]{\@tempdima}{IdInfo.email}%
+    \egroup}%
+}
+\eqEmail{2.25in}
+\def\insTxtFieldIdInfo[#1]#2#3{%
+    \@ifundefined{@quiz}{}{\ifx\eq@online y\relax
+        \ifeq@nosolutions\ifeq@solutionsafter\else
+            \makebox[0pt][r]{\textField[\BC{}#1]{#3}{#2}{11bp}}%
+        \fi\fi\fi
+    }%
+}
+\def\SubmitInfo#1#2{%
+    \def\EqExam@SubmitURL{#1}\def\@EmailInstr{#2}%
+}
+\def\EmailCourseName#1{\def\@EmailCourseName{#1}}
+\EmailCourseName{\websubject}
+\def\EmailExamName#1{\def\@EmailExamName{#1}}
+\EmailExamName{\webtitle}
+\def\EmailSubject#1{\def\@EmailSubject{#1}}
+\EmailSubject{}
+\def\ServerRetnMsg#1{\def\@ServerRetnMsg{#1}}
+\ServerRetnMsg{}
+\def\SubmitButtonLabel#1{\def\@SubmitButtonLabel{#1}}
+\SubmitButtonLabel{Submit}
+\let\priorSubmitJS\@gobble
+\let\postSubmitJS\@empty
+\def\SubmitButton
+{%
+    \ifx\use@email y\ifeq@nosolutions\ifeq@solutionsafter\else
+        \makebox[0pt][l]{\pushButton
+            [\CA{\@SubmitButtonLabel}\A{\JS{%
+                var _eqEok2Submit = true;\r
+                var aSubmitFields = new Array("eqexam", "IdInfo");\r
+                \priorSubmitJS\r
+                if(_eqEok2Submit) this.submitForm("\EqExam@SubmitURL",
+                    true, false, aSubmitFields);\r
+                \postSubmitJS
+                }}]{Submit}{1.5in}{16bp}}%
+        \makebox[0pt][l]{\textField[\F\FHidden\DV{\@EmailInstr}
+            \V{\@EmailInstr}]{IdInfo.mailTo}{11bp}{11bp}}%
+        \makebox[0pt][l]{\textField[\F\FHidden\DV{\@EmailCourseName}
+            \V{\@EmailCourseName}]{IdInfo.courseName}{11bp}{11bp}}%
+        \makebox[0pt][l]{\textField[\F\FHidden\DV{\@EmailExamName}
+            \V{\@EmailExamName}]{IdInfo.examName}{11bp}{11bp}}%
+        \makebox[0pt][l]{\textField[\F\FHidden\DV{\@EmailSubject}
+            \V{\@EmailSubject}]{IdInfo.subject}{11bp}{11bp}}%
+        \makebox[0pt][l]{\textField[\F\FHidden\DV{\@ServerRetnMsg}
+            \V{\@ServerRetnMsg}]{IdInfo.retnmsg}{11bp}{11bp}}%
+    \fi\fi\fi
+}
+\def\thequizno{\if\probstar*\arabic{quizno}\else\alph{quizno}\fi}
+\def\linkContentFormat{%
+    \if\probstar*\arabic{quizno}\else\alph{quizno}\fi}
+\def\linkContentWrapper{(\hfil\linkContentFormat\hfil)}%
+\def\eqExam@Ans@sq@l{%
+    \leavevmode\stepcounter{quizno}\PBS\raggedright
+    \settowidth{\eq@tmplength}{\eq@lw@l}\sbox{\eq@tmpbox}{\eq@l@l}%
+    \eq@tmpdima=\wd\eq@tmpbox
+    \def\link@@Content{\linkContentWrapper}%
+    \hangindent=\eq@tmplength\hangafter=1\relax
+    \edef\fieldName{\if\probstar*%
+        eqexam.\curr@quiz.\theeqquestionnoi.part\alph{partno}\else
+        eqexam.\curr@quiz.\theeqquestionnoi\fi
+    }%
+    \ifx\eq@online y\relax
+    \makebox[0pt][l]{\radio@@Button{}{\fieldName}%
+        {\eq@tmpdima}{\RadioFieldSize}{\Ans@choice\alph{quizno}}%
+        {\eq@protect\A}{\eq@setWidgetProps\eq@l@check@driver}%
+        {\Ans@r@l@Defaults\every@RadioButton\every@qRadioButton}}%
+    \else
+        \edef\@linkcolor{\@nolinkcolor}%
+    \fi
+    \ifeq@nosolutions\edef\@linkcolor{\@nolinkcolor}\fi
+    \textcolor{\@linkcolor}{\makebox[\eq@tmpdima]{\link@@Content}}%
+    \Ans@proofing{\eq@tmpdima}%
+}
+\def\eqExam@Ans@sq@f{%
+    \stepcounter{quizno}\PBS\raggedright
+    \settowidth{\eq@tmplength}{\eq@lw@f}%
+    \eq@tmpdima=\wd\eq@tmpbox%
+    \hangindent=\eq@tmplength\hangafter=1\relax
+    \ifx\eq@online n\previewtrue
+        \Ans@sq@f@driver
+    \else
+        \edef\fieldName{%
+            \if\probstar*eqexam.\curr@quiz.\theeqquestionnoi.%
+                part\alph{partno}
+            \else
+                eqexam.\curr@quiz.\theeqquestionnoi
+            \fi
+        }\insertGrayLetters
+        \radio@@Button{}{\fieldName}{\RadioFieldSize}%
+            {\RadioFieldSize}{\Ans@choice\alph{quizno}}{\eq@protect\A}%
+            {\eq@setWidgetProps\eq@RadioCheck@driver}%
+            {\@@Ans@sq@f@Defaults\Ans@sq@f@Actions\every@RadioButton
+            \every@sqRadioButton}%
+    \fi
+    \Ans@proofing{\RadioFieldSize}%
+}
+\def\eqExam@Ans@ck@sq@l{%
+    \leavevmode\stepcounter{quizno}\PBS\raggedright
+    \settowidth{\eq@tmplength}{\eq@lw@l}\sbox{\eq@tmpbox}{\eq@l@l}%
+    \eq@tmpdima=\wd\eq@tmpbox
+    \def\link@@Content{\linkContentWrapper}%
+    \hangindent=\eq@tmplength\hangafter=1\relax
+    \edef\fieldName{%
+        \if\probstar*eqexam.\curr@quiz.\theeqquestionnoi.%
+            part\alph{partno}.\alph{quizno}
+        \else
+            eqexam.\curr@quiz.\theeqquestionnoi.\alph{quizno}
+        \fi
+    }%
+    \ifx\eq@online y\relax
+    \makebox[0pt][l]{\check@@Box{}{\fieldName}%
+        {\eq@tmpdima}{\RadioFieldSize}{\Ans@choice\alph{quizno}}%
+        {\eq@protect\A}{\eq@setWidgetProps\eq@l@check@driver}%
+        {\Ans@r@l@Defaults\every@RadioButton\every@qRadioButton}}%
+    \else
+        \def\@linkcolor{blue}%
+    \fi
+    \ifeq@nosolutions\def\@linkcolor{blue}\fi
+    \textcolor{\@linkcolor}{\makebox[\eq@tmpdima]{\link@@Content}}%
+    \Ans@proofing{\eq@tmpdima}%
+}
+\def\eqExam@Ans@ck@sq@f{%
+    \stepcounter{quizno}\PBS\raggedright
+    \settowidth{\eq@tmplength}{\eq@lw@f}%
+    \eq@tmpdima=\wd\eq@tmpbox%
+    \hangindent=\eq@tmplength\hangafter=1\relax
+    \ifx\eq@online n\previewtrue
+        \Ans@sq@f@driver
+    \else
+        \edef\fieldName{%
+            \if\probstar*eqexam.\curr@quiz.\theeqquestionnoi.%
+                part\alph{partno}.\alph{quizno}
+            \else
+                eqexam.\curr@quiz.\theeqquestionnoi.\alph{quizno}
+            \fi
+        }%
+        \check@@Box{}{\fieldName}{\RadioFieldSize}%
+            {\RadioFieldSize}{\Ans@choice\alph{quizno}}{\eq@protect\A}%
+            {\eq@setWidgetProps\eq@RadioCheck@driver}%
+            {\@@Ans@sq@f@Defaults\Ans@sq@f@Actions\every@RadioButton
+            \every@sqRadioButton}%
+    \fi
+    \Ans@proofing{\RadioFieldSize}%
+}
+\def\eqExamPriorVspace#1{\edef\fieldName{%
+        \if\probstar*eqexam.\curr@quiz.%
+            \theeqquestionnoi.part\alph{partno}.solution
+        \else
+            eqexam.\curr@quiz.\theeqquestionnoi.solution
+        \fi
+    }%
+    \nobreak\textField[\Ff\FfMultiline\BC{}]
+        {\fieldName}{\linewidth}{#1}%
+    \@gobble
+}
+\@ifpackageloaded{exerquiz}{%
+    \let\Ans@sq@l\eqExam@Ans@sq@l
+    \let\Ans@sq@f\eqExam@Ans@sq@f
+    \let\Ans@ck@sq@l\eqExam@Ans@ck@sq@l
+    \let\Ans@ck@sq@f\eqExam@Ans@ck@sq@f
+    \def\eqexheader@wrapper{\makebox[0pt][r]{%
+        \hypertarget{qex.\the@exno}{\eqexheader}}}
+    \ifx\eq@online y\relax
+        \newcounter{@cntfillin}
+        \let\eqPriorVspace=\eqExamPriorVspace
+    \fi
+}%
+{%
+    \input{eqalone.def}
+    \input{eqexam.def}
+    \def\eqexheader@wrapper{\makebox[0pt][r]{\eqexheader}}
+}
+\renewcommand{\thepartno}{\theeqquestionnoi (\alph{partno})}
+\newcommand{\defaultthepartno}{%
+    \renewcommand{\thepartno}{\theeqquestionnoi (\alph{partno})}%
+}
+\def\Ans@sq@l@driver{%
+    \Rect{\makebox[\eq@tmpdima]{\linkContentWrapper}}%
+    \Ans@proofing{\eq@tmpdima}%
+}
+\def\Ans@sq@f@driver{%
+    \centerWidget\RadioFieldSize
+    \leavevmode\lower\eqcenterWidget\Bbox
+        {\RadioFieldSize}{\RadioFieldSize}%
+    \Ans@proofing{\RadioFieldSize}%
+}
+\def\eq@sqsllabel{\string\textbf{Solution to Quiz:}}
+\def\sqsllabel{\eq@sqsllabel}
+\let\quiz@solns=\ex@solns
+\def\writetoSolns#1{%
+    \immediate\write\quiz@solns{\string\goodbreak\noindent
+        \string\hspace*{-\string\oddsidemargin}%
+        \string\textbf{#1}\par\string\medskip}%
+}
+\def\Ans@sq@l@Actions{}
+\def\Ans@sq@f@Actions{}
+\def\Ans@proofing
+#1{%
+    \ifeq@proofing\if\Ans@choice1\relax
+        \llap{\rlap{\,\@proofingsymbol}\hskip#1\relax}%
+    \fi\fi
+}
+\def\eq@ExamLastPage{\csname eqExamLastPage\endcsname}
+\newcommand{\lhead}[1]{\def\eq@lhead{#1}}
+\lhead{\shortwebsubject/\shortwebtitle}
+\newcommand{\chead}[1]{\def\eq@chead{#1}}
+\chead{-- Seite \arabic{page}\space von \eq@ExamLastPage\space--}
+\newcommand{\rhead}[1]{\def\eq@rhead{#1}}
+\rhead{\eq@ExamName}
+\newcommand{\runExamHeader}{\eq@lhead\hfill\eq@chead\hfill\eq@rhead}
+\newcommand\eqExamRunHead
+{%
+    \addtolength\textwidth{\oddsidemargin}%
+    \noindent\hspace*{-\oddsidemargin}\makebox[\textwidth]
+    {\runExamHeader}%
+}
+\newcommand{\lheadSol}[1]{\def\eq@lheadSol{#1}}
+\lheadSol{\shortwebsubject/\shortwebtitle}
+\newcommand{\cheadSol}[1]{\def\eq@cheadSol{#1}}
+\cheadSol{-- Page \arabic{page}\space of \eq@ExamLastPage\space--}
+\newcommand{\rheadSol}[1]{\def\eq@rheadSol{#1}}
+\rheadSol{SOLUTIONS}
+\newcommand\runExamHeaderSol
+    {\eq@lheadSol\hfill\eq@cheadSol\hfill\eq@rheadSol}
+\def\eqsolutionshook
+{%
+    \gdef\eqExamRunHead{\addtolength\textwidth{\oddsidemargin}%
+    \noindent\hspace*{-\oddsidemargin}\makebox[\textwidth]
+    {\runExamHeaderSol}}%
+}
+\newcommand\maketitledesign
+{%
+    \makebox[\textwidth]{\normalsize
+        \shortstack[l]{\strut\websubject\\\@date}\hfill
+        \shortstack[c]{\webtitle\\\strut\@altTitle}\hfill
+        \shortstack[l]{\strut\eq@ExamName\\\webauthor}}%
+}
+\def\altTitle#1{\def\@altTitle{#1}}
+\let\@altTitle\@empty
+\def\maketitle
+{%
+    \begingroup
+    \addtolength\textwidth{\oddsidemargin}%
+    \noindent\hspace*{-\oddsidemargin}%
+    \raisebox{.7in}[0pt][0pt]{\SubmitButton}%
+    \maketitledesign
+    \endgroup
+}
+\def\eqexcoverpage
+{%
+    \begingroup
+    \eqexcoverpagedesign
+    \endgroup\newpage
+}
+\newcommand{\coverpagesubject}[1]{\def\coverpage@subject{#1}}
+\let\coverpage@subject\@empty
+\def\eqexamsubject{\ifx\coverpage@subject\@empty\websubject
+    \else\coverpage@subject\fi}
+\newcommand{\coverpageUniversityFmt}[1]{%
+    \def\eqex@coverpageUniversityFmt{#1}}
+\coverpageUniversityFmt{\bfseries\large}
+\newcommand{\coverpageSubjectFmt}[1]{%
+    \def\eqex@coverpageSubjectFmt{#1}}
+\coverpageSubjectFmt{\bfseries\large}
+\newcommand{\coverpageTitleFmt}[1]{%
+    \def\eqex@coverpageTitleFmt{#1}}
+\coverpageTitleFmt{\bfseries\large}
+\newcommand{\eqexcoverpagedesign}
+{%
+    \thispagestyle{empty}
+    \addtolength\textwidth{\oddsidemargin}
+    \vspace*{.1\textheight}
+    \noindent\hspace*{-\oddsidemargin}%
+    \makebox[\linewidth]{\parbox{\linewidth}%
+        {\eqex@coverpageUniversityFmt
+        \color{\webuniversity@color}%
+        \centering\webuniversity}}
+    \par\vspace{.1\textheight}
+    \noindent\hspace*{-\oddsidemargin}%
+    \makebox[\linewidth]{\parbox{\linewidth}%
+        {\eqex@coverpageSubjectFmt
+        \color{\websubject@color}%
+        \centering\eqexamsubject}}
+    \par\vspace{\bigskipamount}
+    \noindent\hspace*{-\oddsidemargin}%
+    \makebox[\linewidth]{\parbox{\linewidth}%
+        {\eqex@coverpageTitleFmt
+         \color{\webtitle@color}%
+        \centering\webtitle}}
+    \par\vspace{\stretch{1}}
+    \optionalpagematter
+    \par\vspace{\stretch{1}}\parindent0pt
+    \eq@ExamName\\[2ex]\eq@SID\\[2ex]
+    \ifx\use@email y\eq@Email\\[2ex]\fi
+    \textcolor{\webauthor@color}{\webauthor}, \@date\par\vfill
+}
+\AtBeginDocument{\eqex@coverpage}
+\def\probvalue#1#2{%
+    \addtocounter{eqpointvalue}{#1}%
+    \marginpoints{#1}{#2}%
+    \mark{\theeqpointvalue\csname eqExam\endcsname\theeq@numparts}%
+}
+\def\eqleftmarginbox#1#2{\makebox[0pt][r]{%
+    \setlength\tabcolsep{0pt}%
+    \raisebox{-.5\height}[0pt][0pt]{\parbox{\marginparwidth}{%
+        \tabcolsep=0pt\relax
+        \begin{tabular}{|c|}\hline
+            \vrule height15pt width0pt\\\hline
+            \makebox[\marginparwidth]{%
+                \marginpointsboxtext{#1}{#2}}\\\hline
+        \end{tabular}%
+    }}%
+    \hspace*{\oddsidemargin}\hspace*{\marginparsep}}%
+}
+\providecommand{\ptsLabel}[1]{\def\eqptsLabel{#1}}\ptsLabel{pts}
+\providecommand{\ptLabel}[1]{\def\eqptLabel{#1}}\ptLabel{pt}
+\newcommand{\eachLabel}[1]{\def\eq@eachLabel{#1}}\eachLabel{ea.}
+\newcommand{\pointsLabel}[1]{%
+    \def\eq@pointsLabel{#1}}\pointsLabel{points}
+\newcommand{\pointLabel}[1]{%
+    \def\eq@pointLabel{#1}}\pointLabel{point}
+\newcommand\leftmarginPtsTxt[1]{(\small$#1^{\text{%
+    \ifnum#1=1\relax\eqptLabel\else\eqptsLabel\fi}}$)}
+\newcommand\leftmarginPtsEaTxt[1]{(\small$#1_{\text{%
+    \eq@eachLabel}}^{\text{\ifnum#1=1\relax
+        \eqptLabel\else\eqptsLabel\fi}}$)}
+\def\marginpointtext#1#2{\ifnum#2=0\leftmarginPtsTxt{#1}\else
+    \leftmarginPtsEaTxt{#2}\fi
+}
+\def\eqleftmargin#1#2{\makebox[0pt][r]{\marginpointtext{#1}{#2}%
+    \hspace*{\oddsidemargin}\hspace*{\marginparsep}}%
+}
+\newcommand{\marginpointsboxtext}[2]{\small$#1\,\text{%
+    \ifnum#1=1\relax\eqptLabel\else\eqptsLabel\fi}$}
+\def\@insertPointsBoxPDF
+{
+    \def\fieldName{pointsgiven.\curr@quiz.page\thepage.%
+        \theeqquestionnoi}%
+    \calcTextField[\F\FHidden\BC{}\Q1\textColor{1 0 0 rg}]
+        {\fieldName}{\marginparwidth}{15pt}%
+}
+\def\@insertTotalsBoxPDF
+{
+    \def\fieldName{pagetotals.\curr@quiz.page\thepage}%
+    \calcTextField[\F\FHidden\BC{}\Q1\textColor{1 0 0 rg}
+        \AA{\AACalculate{AFSimple_Calculate("SUM",
+            new Array("pointsgiven.\curr@quiz.page\thepage"));}}]
+    {\fieldName}{\marginparwidth}{15pt}%
+}
+\ifx\use@email y
+    \let\insertPointsBoxPDF=\@insertPointsBoxPDF
+    \let\insertTotalsBoxPDF=\@insertTotalsBoxPDF
+\else
+    \let\insertPointsBoxPDF=\@empty
+    \let\insertTotalsBoxPDF=\@empty
+\fi
+\def\eqrightmarginbox#1#2{%
+    \makebox[0pt][l]{%
+        \setlength\tabcolsep{0pt}%
+        \hspace*{\textwidth}\hspace*{\marginparsep}%
+        \raisebox{-.5\height}[0pt][0pt]{%
+            \parbox{\marginparwidth}{%
+                \tabcolsep=0pt\relax
+                \begin{tabular}{|c|}\hline
+                   \vrule height15pt width0pt\insertPointsBoxPDF\\\hline
+                   \makebox[\marginparwidth]{%
+                        \marginpointsboxtext{#1}{#2}}\\\hline
+                \end{tabular}%
+            }%
+        }\hfil
+    }%
+}
+\def\eqeomarginbox#1#2{%
+    \makebox[0pt][l]{%
+        \setlength\tabcolsep{0pt}%
+        \hspace*{\textwidth}\hspace*{\marginparsep}%
+        \raisebox{-.5\height}[0pt][0pt]{%
+            \parbox{\marginparwidth}{%
+                \tabcolsep=0pt\relax
+                \begin{tabular}{|c|}\hline
+                   \vrule height15pt width0pt\insertTotalsBoxPDF\\\hline
+                   \makebox[\marginparwidth]{%
+                      \marginpointsboxtext{#1}{#2}}\\\hline
+                \end{tabular}%
+            }%
+        }\hfil
+    }%
+}
+\setbox\eq@pointbox=\hbox{%
+    \parbox{\marginparwidth}{%
+        \tabcolsep=0pt\relax
+        \begin{tabular}{|c|}\hline
+            \vrule height15pt width0pt\\\hline
+            \makebox[\marginparwidth]{%
+                \marginpointsboxtext{00}{0}}\\\hline
+        \end{tabular}%
+    }%
+}
+\setlength\eq@pointboxtotalheight{\dp\eq@pointbox+\ht\eq@pointbox}
+\def\lastparttotaled{0}
+\def\parsetotals#1\eqExam#2\end{\def\argi{#1}\def\argii{#2}}
+\def\stripeqExam#1\eqExam{\def\argii{#1}}
+\def\settotalsbox{%
+    \expandafter\parsetotals\botmark\eqExam\end
+    \ifx\argi\@empty\hfil
+    \else\ifx\argii\@empty\hfil
+        \else
+            \expandafter\stripeqExam\argii
+            \setcounter{eqpointsthispage}{\argi}%
+            \addtocounter{eqpointsthispage}{-\value{eqpointsofar}}%
+            \setcounter{eqpointsofar}{\argi}%
+            \xdef\lastparttotaled{\argii}%
+            \immediate\write\@auxout{\string\expandafter\string\gdef
+            \string\csname\space Page\thepage total\string\endcsname
+                {\theeqpointsthispage}}%
+            \totalsbox
+        \fi
+    \fi
+}
+\newcommand\totalsboxtext{\small$\theeqpointsthispage\,\text{%
+        \ifnum\theeqpointsthispage=1\relax
+            \eqptLabel\else\eqptsLabel\fi}$}
+\def\totalsboxleft{%
+    \makebox[0pt][r]{\setlength\tabcolsep{0pt}%
+    \raisebox{-\height-\marginparsep}[0pt][0pt]{%
+        \parbox{\marginparwidth}{%
+           \begin{tabular}{|c|}\hline
+           \vrule height15pt width0pt\insertTotalsBoxPDF\\\hline
+           \parbox{\marginparwidth}{%
+               \strut\centering\totalsboxtext\strut}\\\hline
+            \end{tabular}%
+        }}\hspace*{\oddsidemargin}\hspace*{\marginparsep}%
+    \hspace*{\parindent}}\hfil
+}
+\def\totalsboxright
+{%
+    \makebox[0pt][l]{\setlength\tabcolsep{0pt}%
+        \hspace*{\textwidth}\hspace*{\marginparsep}%
+            \raisebox{-\height-\marginparsep}[0pt][0pt]{%
+                \parbox{\marginparwidth}{%
+                   \begin{tabular}{|c|}\hline
+                   \vrule height15pt width0pt\insertTotalsBoxPDF\\\hline
+                   \parbox{\marginparwidth}{%
+                       \strut\centering\totalsboxtext\strut}\\\hline
+                    \end{tabular}%
+                }%
+            }%
+    }\hfil
+}
+\AtBeginDocument{\mark{0\csname eqExam\endcsname0}}
+\AtEndDocument{%
+    \immediate\write\@auxout{\string\expandafter\string\gdef
+        \string\csname\space NumberOfParts\string\endcsname
+            {\arabic{eq@numparts}}}%
+    \immediate\write\@auxout{\string\expandafter\string\gdef
+        \string\csname\space thePartNames\string\endcsname
+            {\the\partNames}}%
+    \clearpage\addtocounter{page}{-1}\writelastpage
+    \addtocounter{page}{1}%
+}
+\def\theGrandTotal{%
+    \begingroup
+    \count0=0\relax
+    \def\\##1{\advance\count0by\csname##1total\endcsname}%
+    \csname thePartNames\endcsname
+    \xdef\eqeGrandTotal{\the\count0 }%
+    \endgroup
+    \csname eqeGrandTotal\endcsname
+}
+\newcounter{markerCnt}
+\def\placeMarkerHere#1{%
+    \immediate\write\@auxout{\string\expandafter\string\gdef
+    \string\csname\space#1SaveTotalHere\string\endcsname
+        {\theeqpointvalue}}%
+}
+\newcommand{\calcFromMarkers}[3][\@markerTotalFmt]{%
+    \@ifundefined{#2SaveTotalHere}{}%
+        {\@ifundefined{#3SaveTotalHere}{}{\setcounter{markerCnt}%
+        {\@nameuse{#2SaveTotalHere}-\@nameuse{#3SaveTotalHere}}%
+        \ifnum\value{markerCnt}<0\relax
+        \setcountertotalHereCnt{-\value{markerCnt}}\fi#1}}%
+}
+\newcommand{\markerTotalFmt}[1]{\def\@markerTotalFmt{#1}}
+\markerTotalFmt{ (\themarkerCnt\space points)}
+\def\placeAtxy#1#2#3{%
+    \par\nointerlineskip
+    \ifeq@nosolutions\ifx\eq@insertverticalspace y%
+            \ifvmode
+                \makebox[0pt][l]{\hspace*{-\parindent}\hspace*{#1}%
+                    \raisebox{#2}[0pt][0pt]{#3}}
+            \fi
+        \fi
+    \fi
+}
+\newsavebox{\workareasb}
+\newenvironment{workarea}[2][\linewidth]
+{%
+    \edef\workareadepth{\if\currhideopt H0pt\else#2\fi}%
+    \begin{lrbox}{\workareasb}\setlength{\eqetmplengtha}{#1}%
+    \begin{minipage}[b][\workareadepth][t]{\eqetmplengtha}\vspace*{3pt}%
+}%
+{%
+    \end{minipage}\end{lrbox}%
+    \par\ifeq@nosolutions\ifx\eq@insertverticalspace y%
+    \vspace{-\baselineskip}\fi\fi%\nointerlineskip
+    \ifeq@nosolutions\ifx\eq@insertverticalspace y%
+    \if\currhideopt H\else
+        \noindent\strut\smash{\usebox{\workareasb}}%
+    \fi\fi\fi
+}
+\newcommand\panelgap{3pt}
+\newsavebox{\eqpanelbox}
+\def\panelwidth{\the\wd\eqpanelbox}\def\panelheight{\the\ht\eqpanelbox}%
+\newcounter{panel@cnt}
+\newwrite\panel@write
+\let\usepanelwidth=\relax
+\makeatletter
+\newenvironment{panel}[2][l]
+{%
+    \gdef\ss@Argi{#1}\gdef\ss@Argiii{#2}% #1 r or l #2 width of panel
+    \stepcounter{panel@cnt}%
+    \immediate\openout \panel@write panel\thepanel@cnt.cut
+    % need to manage the h, H, and global overrides.
+    \if\currhideopt H%
+        \immediate\write\panel@write{\vfill}%
+        \immediate\closeout\panel@write
+        \gdef\ss@Argii{0pt}%
+    \else
+        \if\currhideopt h\ifeq@solutionsafter\else
+            \ifeq@globalshowsolutions\else
+                \immediate\write\panel@write{\vfill}%
+                \immediate\closeout\panel@write
+                \gdef\ss@Argii{0pt}%
+            \fi\fi
+        \fi
+    \fi
+    \begingroup
+    \let\verbatim@out=\panel@write
+    \verbatimwrite
+}
+{%
+    \endverbatimwrite
+    \immediate\closeout\panel@write
+    \endgroup
+    \xdef\mp@Width{\ifeq@solutionsafter\noexpand\linewidth
+        \else\noexpand\linewidth-\ss@Argiii-\panelgap\fi}%
+}
+\long\def\eqe@IW#1{%
+    \ifeq@solutionsafter
+        \let\eq@next=\@empty
+    \else
+        \def\eq@next{\immediate\write\verbatim@out{#1}}%
+        \ifeq@nosolutions\else
+            \if\currhideopt H%
+                \gdef\ss@Argii{0pt}\let\eq@next=\@empty
+            \else
+                \if\currhideopt h%
+                    \ifeq@globalshowsolutions\else
+                        \gdef\ss@Argii{0pt}\let\eq@next=\@empty
+                    \fi
+                \fi
+            \fi
+        \fi
+    \fi
+    \eq@next
+}
+\newenvironment{@ssSolution}[1][\ss@Argii]%
+{%
+    \xdef\eqe@depth{\ifeq@nosolutions\ss@Argii\else
+        \ifeq@solutionsafter\ss@Argii\else0pt\fi\fi}%
+    \xdef\mp@Width{\ifeq@solutionsafter\noexpand\linewidth\else
+        \noexpand\linewidth-\ss@Argiii-\panelgap\fi}%
+    \if\ss@Argi l%
+        \ifeq@solutionsafter
+            \def\eqe@lPanel{\parbox[b][\eqe@depth][t]{\ss@Argiii}
+                {\input{panel\thepanel@cnt.cut}\vfill}\hfill}%
+            \def\eqe@rPanel{\@empty}%
+        \else
+            \def\eqe@lPanel{\string\parbox[b][\string\eqe@depth]%
+                {\ss@Argiii}%
+                {\string\input{panel\thepanel@cnt.cut}\vfill}\hfill^^J}%
+            \def\eqe@rPanel{\@empty}%
+        \fi
+    \else
+        \ifeq@solutionsafter
+            \def\eqe@lPanel{\@empty}%
+            \def\eqe@rPanel{\hfill\parbox[b][\eqe@depth][t]{\ss@Argiii}
+                {\hfill\input{panel\thepanel@cnt.cut}\vfill}}%
+        \else
+            \def\eqe@lPanel{\@empty}%
+            \def\eqe@rPanel{\hfill\string\parbox[b][\string\eqe@depth]%
+                {\ss@Argiii}%
+                {\endgraf\string\noindent\hfill%
+                    \string\input{panel\thepanel@cnt.cut}\vfill}}%
+        \fi
+    \fi
+    \let\verbatim@out=\ex@solns
+    \par\ifeq@solutionsafter\smallskip\fi\noindent\minipage{\linewidth}%
+    \if\ss@Argi l\noindent\parbox[b][\eqe@depth][t]{\ss@Argiii}%
+        {\vfill}\hfill\fi
+    \minipage[b][\eqe@depth][t]{\mp@Width}%
+    {\lccode`C=`\%\lowercase{\eqe@IW{\def\string\panelgap{\panelgap}%
+        \edef\string\eqe@depth
+            {\ifeq@nosolutions\ss@Argii\else\ss@Argii\fi}C}}}%
+    {\lccode`C=`\%\lowercase{\eqe@IW{%
+            \string\strut\string\par\string\nobreak\string\noindent%
+                \string\hbox\space to\string\linewidth\bgroup^^J%
+                \eqe@lPanel\string\minipage[b][\string\eqe@depth][t]%
+                {\string\linewidth-\ss@Argiii-\panelgap}C
+     }}}%
+     \ifeq@solutionsafter
+        \noindent\strut\hbox to\linewidth\bgroup
+        \eqe@lPanel
+        \minipage[b][\eqe@depth][t]{\linewidth-\ss@Argiii-\panelgap}%
+        \def\solutionsafterSkip{}%
+     \fi
+     \@sssolution[#1]%
+}{%
+    \eqe@IW{\noexpand\endminipage\eqe@rPanel\egroup}%
+    \ifeq@solutionsafter\endminipage\eqe@rPanel\egroup\fi
+    \end@sssolution
+    \endminipage\endminipage
+}
+\newenvironment{splitsolution}[1] %  #1 depth
+{%
+    \gdef\ss@Argii{#1}%
+    \let\@sssolution = \solution
+    \let\end@sssolution = \endsolution
+    \let\solution = \@ssSolution
+    \let\endsolution = \end@ssSolution
+    \par\noindent\ignorespaces
+}{%
+    \ifeq@solutionsafter\strut\par\fi
+    \edef\eqe@workwidth{\if\ss@Argi l\noexpand\ss@Argiii
+        \else\noexpand\linewidth\fi}%
+    \edef\eqe@workfill{\if\ss@Argi l\else\hfill\fi}%
+    \begin{workarea}[\eqe@workwidth]{\eqe@depth}%
+    \eqe@workfill\input{panel\thepanel@cnt.cut}%
+    \end{workarea}
+    \strut\par
+}
+\renewcommand{\paragraph}
+    {\@startsection{paragraph}{4}{0pt}{12pt}{-3pt}{\bfseries}}
+\newcommand{\defaultInstructions}[1]{\def\eq@default@Instructions{#1}}
+\defaultInstructions{Instructions.}
+\newenvironment{instructions}[1][\eq@default@Instructions]
+{%
+    \leftskip-\oddsidemargin \rightskip-\evensidemargin
+    \def\eq@argi{#1}%
+    \paragraph*{\textcolor{\@instructionsColor}{#1}\normalcolor%
+    \ifx\eq@nosummarytotals y\else\ifx\eq@argi\@empty\else\ \fi
+        {\normalfont\summaryTotalsTxt}\ \fi}\hskip-\lastskip
+    \ifx\eq@nosummarytotals y\ifx\eq@argi\@empty\else\ \fi\fi
+    \ignorespaces
+}{\par\vskip\medskipamount}
+\newcommand\summaryPointTotal{\csname\thisexamlabel total\endcsname}
+\newcommand\summaryTotalsTxt{($\summaryPointTotal\,\text{%
+    \@ifundefined{\thisexamlabel total}{\eq@pointsLabel}%
+    {\ifnum\summaryPointTotal=1\relax
+        \eq@pointLabel\else\eq@pointsLabel\fi}}$)}
+\ifx\hyper@anchor\@undefined\else
+    \renewcommand\theHeqquestionnoi
+            {\curr@quiz.\theeqquestionnoi}
+    \renewcommand\theHquizno{%
+        \if\probstar*\curr@quiz.%
+            \theeqquestionnoi.part\alph{partno}.\arabic{quizno}%
+        \else
+            \curr@quiz.%
+                \theeqquestionnoi.\arabic{quizno}%
+        \fi
+    }
+\fi
+\newenvironment{eqComments}[1][\strut]
+{%
+    \removelastskip\removelastskip
+    \vskip\medskipamount\leftskip-\oddsidemargin
+    \rightskip-\evensidemargin
+    \noindent\textbf{\textcolor{\@eqCommentsColor}{#1}}%
+}{%
+    \vskip\medskipamount
+}
+\def\exambegdef
+{%
+    \csname\thisexamlabel pagemark\endcsname
+    \expandafter
+    \ifx\csname\thisexamlabel pageno\endcsname\relax
+    \else
+        \expandafter
+        \ifx\csname pagenofirstprob\thisexamlabel\endcsname\relax
+        \else
+            \ifnum\csname\thisexamlabel pageno\endcsname
+                <\csname pagenofirstprob\thisexamlabel\endcsname
+            \else
+                \expandafter
+                \ifx\csname\thisexamlabel pagemark\endcsname\relax
+                \else
+                    \ifnum\value{page}=%
+                        \csname\thisexamlabel pageno\endcsname
+                        \immediate\write\@auxout{%
+                            \string\expandafter\string\gdef
+                            \string\csname\space
+                            \thisexamlabel pagemark\string\endcsname
+                                {\string\newpage}}%
+                    \fi
+                \fi
+            \fi
+        \fi
+    \fi
+    \setcounter{eqquestionnoi}{0}%
+    \setcounter{eqpointvalue}{0}%
+    \setcounter{eqpointsofar}{0}%
+    \setcounter{eqpointsthispage}{0}%
+    \setcounter{eq@count}{0}%
+    \stepcounter{eq@numparts}%
+    \immediate\write\@auxout{\string\expandafter\string\gdef
+    \string\csname\space\thisexamlabel pageno\string\endcsname
+        {\thepage}}%
+    \let\sq@priorhook=\@empty
+    \settowidth{\labelwidth}{\normalfont\bfseries00.\ }%
+}
+\def\examenddef
+{%
+    \expandafter\ifx\csname NumberOfParts\endcsname\relax
+    \else
+        \ifnum\value{eq@numparts}<\NumberOfParts
+            \setcounter{eq@count}{\value{eqpointvalue}}%
+            \addtocounter{eq@count}{-\value{eqpointsofar}}%
+            \ifx\eq@parttotals y\relax
+                \@actionsAtPageBreak{\global\let\@spacetobreak1}
+                    {\global\let\@spacetobreak0}%
+                \ifx\@spacetobreak0\relax
+                    \bgroup\@tempdima=\pagetotal
+                    \advance\@tempdima32pt\relax
+                    \ifdim\@tempdima>\pagegoal\aftergroup\newpage
+                    \else
+                        \ifnum\arabic{eq@count}>0
+                            \ifx\@reportpoints1\else\@checkSpacing\fi
+                            \raisebox{0pt}[0pt][0pt]{%
+                                \hspace*{-\parindent}%
+                                \textcolor{blue}{\eqeomarginbox
+                                    {\arabic{eq@count}}{0}}}%
+                        \fi
+                        \ifx\eqx@separationrule y\separationrule\fi
+                    \fi\egroup
+                \fi
+            \else\ifx\eqx@separationrule y\separationrule\fi
+            \fi
+        \fi
+    \fi
+    \writetotalstoaux
+    \writelastpage
+}
+\def\@actionsAtPageBreak#1#2{%
+    \bgroup\@tempdima\pagegoal\advance\@tempdima-\pagetotal
+    \@tempdimb\@fvsizeskip\vsize
+    \ifdim\@tempdima < \@tempdimb #1\else #2\fi\egroup
+}
+\newcommand{\separationrule}{\makebox[\linewidth]%
+    {\centering\rule{.67\linewidth}{.4pt}}}
+\def\setDefaultfvsizeskip#1{\def\default@fvsizeskip{#1}%
+    \def\@fvsizeskip{#1}}
+\def\default@fvsizeskip{.3}
+\edef\@fvsizeskip{\default@fvsizeskip}
+\def\fvsizeskip#1{\def\@fvsizeskip{#1}}
+\newenvironment{exam}[2][\@empty]
+{%
+    \makeRoomForProb{\@fvsizeskip\vsize}{0}%
+    \xdef\@fvsizeskip{\default@fvsizeskip}%
+    \gdef\thisexamlabel{#2}\gdef\curr@quiz{#2}%
+    \edef\eq@tmp{\the\partNames}%
+    \global\partNames=\expandafter{\eq@tmp\\{#2}}%
+    \expandafter\ifx\csname NumberOfParts\endcsname\relax\else
+    \ifnum\csname NumberOfParts\endcsname=1\else
+    \ifx#1\@empty\writetoSolns{#2}\else\writetoSolns{#1}\fi\fi\fi
+    \exambegdef
+    \expandafter\shortquiz\sqstar[#2]%
+}{%
+    \examenddef
+    \endshortquiz
+}
+\def\writetotalstoaux{%
+    \immediate\write\@auxout{\string\expandafter\string\gdef
+    \string\csname\space\thisexamlabel total\string\endcsname
+        {\theeqpointvalue}}%
+}
+\def\writelastpage{%
+   \immediate\write\@auxout{\string\expandafter\string\gdef
+   \string\csname\space eqExamLastPage\string\endcsname{\arabic{page}}}%
+}
+\def\exlabel{}
+\def\sqlabel{}
+\def\exsolafter{\textit{Solution}:}
+\def\sqsolafter{\textit{Solution}:}
+\def\exlabelformat{\textbf{\theeqquestionnoi.\ }}
+\def\exlabelformatwp{\exlabelformat}%
+\def\exsllabelformat
+    {\string\llap{\string\textbf{\theeqquestionnoi.\ }}}
+\def\exsllabelformatwp{\string\llap{%
+    \string\textbf{\theeqquestionnoi.\ }}\eq@partsformat\ }%
+\ifeq@solutionsafter
+    \def\exrtnlabelformat{}
+    \def\exrtnlabelformatwp{}
+    \def\eq@sqslrtnlabel{}
+\else
+    \def\exrtnlabelformat{$\square$}
+    \def\exrtnlabelformatwp{$\square$}
+    \def\eq@sqslrtnlabel{$\square$}
+\fi
+\def\sqslrtnlabel{\eq@sqslrtnlabel}
+\def\exsectitle{\normalsize\hspace*
+    {-\oddsidemargin}Solutions to \webtitle}
+\def\exsecrunhead{Solutions to \websubject}%
+\def\eq@sqslsectitle{}
+\def\eq@sqslsecrunhead{}
+\def\eq@sqsllabel{{\string\llap{\string\textbf{\theeqquestionnoi.\ }}}}
+\def\eq@sqlabel{}
+\let\include@quizsolutions=\relax
+\let\solnhspace=\@empty
+\newcommand{\fillin}[3][u]{%
+    \ifx#1u\let\@fillinFmt=\underbar
+    \else\ifx#1b\let\@fillinFmt=\relax
+    \else\let\@fillinFmt=\relax\fi\fi
+    \ifeq@proofing
+        \@fillinFmt{\makebox[#2]{%
+            \strut\hfil\bfseries\color{red}#3\hfil}}%
+    \else
+        \@fillinFmt{\makebox[#2]{\strut\hfil}}%
+        \@ifundefined{@quiz}{}{%
+            \ifx\eq@online y\relax
+                \ifeq@nosolutions
+                    \ifeq@solutionsafter\else
+                        \ifx\eq@insertverticalspace y\relax
+                            \stepcounter{@cntfillin}%
+                            \edef\fieldName{%
+                                \if\probstar*eqexam.\curr@quiz.fillin.%
+                                   \theeqquestionnoi.part\alph{partno}.%
+                                   fi\the@cntfillin
+                                \else
+                                    eqexam.\curr@quiz.fillin.%
+                                    \theeqquestionnoi.fi\the@cntfillin
+                                \fi
+                            }\makebox[0pt][r]{\textField[\BC{}]{%
+                                \fieldName}{#2}{11bp}}%
+                        \fi
+                    \fi
+                \fi
+            \fi
+        }%
+    \fi\space\ignorespaces}
+\newcommand\defaultTFwidth{30pt}
+\newcommand\TF[2][\defaultTFwidth]{%
+    \def\eq@next{\fillin{#1}{#2}}%
+    \ifdim\eq@extralabelsep=0pt\relax\else
+        \if\probstar*\relax\if\exerwparts@cols x
+            \def\eq@next{\makebox[0pt][r]{%
+                \fillin{#1}{#2}}\ignorespaces}%
+    \fi\fi\fi
+\eq@next}
+\def\fillinWidth#1{%
+    \if\probstar*
+        \settowidth{\eq@tmplengthA}{\normalfont\ }%
+        \addtolength{\eq@tmplengthA}{#1}%
+        \edef\eq@extralabelsep{\the\eq@tmplengthA}%
+    \fi
+}
+\def\makeDoNum#1{\xdef\nDoNum{#1}%
+    \xdef\DoNum{\ifcase#1??\or one\or two\or three\or
+    four\or five\or six\or seven\or eight\or nine\or ten\fi}}
+\def\makeOutOfNum#1{\xdef\nOutOfNum{#1}%
+    \xdef\OutOfNum{\ifcase#1??\or one\or two\or three\or
+    four\or five\or six\or seven\or eight\or nine\or ten\fi}}
+\def\prob@Arg#1ea#2\end{\def\argi{#1}\def\argii{#2}}
+\def\makeRoomForProb#1#2{%
+    \bgroup\@nobreakfalse\addpenalty{-500}%
+    \@tempdima \pagegoal \advance \@tempdima -\pagetotal
+    \ifdim \@tempdima < #1 \newpage\fi \egroup
+    \ifx1#2\ifnum\@reportpoints>1 \@checkSpacing\fi\fi
+}
+\def\@checkSpacing{\bgroup
+    \@tempdima = \lastPageTotal
+    \@tempdimb = \pagetotal
+    \ifdim\@tempdima < \@tempdimb
+        \advance\@tempdimb by-\@tempdima
+        \ifdim\@tempdimb < \eq@pointboxtotalheight
+            \@tempdima=\eq@pointboxtotalheight
+            \advance\@tempdima3pt\relax
+            \advance\@tempdima by-\@tempdimb
+            \vspace*{\@tempdima}%
+        \fi
+    \fi
+\egroup}
+\def\default@nbaselineskip{6}
+\edef\@nbaselineskip{\default@nbaselineskip}
+\def\nbaselineskip#1{\def\@nbaselineskip{#1}}
+\newenvironment{problem}[1][]{%
+    \makeRoomForProb{\@nbaselineskip\baselineskip}{1}%
+    \xdef\@nbaselineskip{\default@nbaselineskip}%
+    \gdef\probstar{x}%
+    \let\afterlabelhskip=\@empty
+    \ifx\marginpoints\@empty
+    \else
+        \def\numpoints{#1}%
+        \ifx\numpoints\@empty
+            \let\marginpoints\@empty
+        \else
+            \def\marginparpriorhook{\noindent\probvalue{#1}{0}}%
+        \fi
+    \fi
+    \setcounter{eq@count}{\value{eqquestionnoi}}%
+    \addtocounter{eq@count}{1}%
+    \ifnum\value{eq@count}=1\relax
+        \immediate\write\@auxout{\string\expandafter\string\gdef\string
+        \csname\space pagenofirstprob\thisexamlabel\string\endcsname
+        {\thepage}}%
+    \fi
+    \proofingsymbol{\ding{52}}%
+    \begin{exercise}[eqquestionnoi]%
+}{\end{exercise}%
+    \ifeqlocalversion\ifeqglobalversion
+        \xdef\eqe@tmp{\noexpand\forVersion{\eq@selectedVersion}}%
+        \aftergroup\eqe@tmp
+    \fi\fi
+    \global\eqlocalversionfalse
+}
+\newcommand\itemPTsTxt[1]{$#1\,\text{%
+    \ifnum#1=1\relax\eqptLabel\else\eqptsLabel\fi}$}
+\newcommand{\itemPTsFormated}[1]{(#1)}
+\def\PTs{\@ifstar{\@PTs{*}}{\@PTs{x}}}
+\def\@PTs#1#2{%
+    \if\@reportpoints0\else
+        \addtocounter{eq@count}{#2}\if#1*\else
+        \itemPTsFormated{\itemPTsTxt{#2}}\fi
+    \fi
+}
+\let\auto=\relax
+\def\isItD@{\@ifnextchar\Do{\let\yest@D@=y\y@st@Do}
+    {\let\yest@D@=n\@gobblet@end}}
+\let\yest@D@=n
+\def\y@st@Do\Do#1\end{\gdef\D@Num{#1}}
+\def\@gobblet@end#1\end{}
+\expandafter\def\csname problem*\endcsname{%
+    \@ifnextchar[{\pr@bl@m@star}{\pr@bl@m@star[\@empty]}}
+\def\pr@bl@m@star[#1]{%
+    \@ifnextchar[{\pr@blem@star{#1}}{\pr@blem@star{#1}[\@empty]}}
+\def\pr@blem@star#1[#2]{%
+    \makeRoomForProb{\@nbaselineskip\baselineskip}{1}%
+    \xdef\@nbaselineskip{\default@nbaselineskip}%
+    \proofingsymbol{\ding{52}}%
+    \gdef\probstar{*}%
+    \gdef\pr@b@secondarg{#2}%
+    \setcounter{eq@count}{0}%
+    \let\afterlabelhskip=\@empty
+    \global\let\probpointseach=\@empty
+    \ifx#1\auto\global\let\probpointseach\relax
+        \def\@next{\autocalcparts}%
+    \else
+        \ifx#2\@empty\else
+            \setcounter{eq@count}{\value{eqquestionnoi}}%
+            \addtocounter{eq@count}{1}%
+                \@ifundefined{nPartsThisProb\thisexamlabel.\theeq@count}
+                {\makeOutOfNum{0}\makeDoNum{0}}%
+                {%
+                    \expandafter\makeOutOfNum{%
+                        \csname nPartsThisProb\thisexamlabel.%
+                            \theeq@count\endcsname}%
+                    \expandafter\makeDoNum{%
+                        \csname DoNumThisProb\thisexamlabel.%
+                            \theeq@count\endcsname}%
+                }%
+        \fi
+        \def\@next{\manualcalcparts{#1}}%
+    \fi\@next
+    \begin{exercise}[eqquestionnoi]*}%
+\expandafter\def\csname endproblem*\endcsname{%
+    \immediate\write\@auxout{\string\expandafter\string\gdef\string
+    \csname\space nPartsThisProb\thisexamlabel.\theeqquestionnoi
+    \string\endcsname{\arabic{partno}}}%
+    \ifx\probpointseach\@empty\else
+    \ifx\probpointseach\auto
+        \immediate\write\@auxout{%
+            \string\expandafter\string\gdef\string
+            \csname\space prob\thisexamlabel.\theeqquestionnoi
+            \string\endcsname{\theeq@count}}%
+    \else
+        \setcounter{eq@count}{\value{partno}}%
+        \ifx\pr@b@secondarg\@empty\else
+            \bgroup\toks0 =\expandafter{\pr@b@secondarg}%
+            \expandafter\isItD@\the\toks0 \end
+            \ifx\yest@D@ y
+                \immediate\write\@auxout{%
+                    \string\expandafter\string\gdef\string
+                    \csname\space DoNumThisProb\thisexamlabel.%
+                    \theeqquestionnoi\string\endcsname{\D@Num}}%
+                \@tempcnta = \value{eq@count}%
+                \advance\@tempcnta -\D@Num
+                \global\advance\value{eq@count}-\@tempcnta
+            \fi
+            \egroup
+        \fi
+        \multiply\value{eq@count}\argi
+        \immediate\write\@auxout{%
+            \string\expandafter\string\gdef\string
+            \csname\space prob\thisexamlabel.\theeqquestionnoi
+            \string\endcsname{\theeq@count}}%
+    \fi\fi
+    \end{exercise}%
+    \ifeqlocalversion\ifeqglobalversion
+        \xdef\eqe@tmp{\noexpand\forVersion{\eq@selectedVersion}}%
+        \aftergroup\eqe@tmp
+    \fi\fi
+    \global\eqlocalversionfalse
+}
+\def\pushProblem{\xdef\nlastItem{\arabic{partno}}\end{parts}}
+\def\popProblem{\begin{parts}\setcounter{partno}{\nlastItem}}
+\def\lastPageTotal{0pt}
+\def\marginparafterhook{\xdef\lastPageTotal{\the\pagetotal}}
+\def\manualcalcparts#1{%
+    \expandafter\prob@Arg#1ea\end
+    \ifx\argii\@empty\def\numpoints{#1}%
+    \else
+        \gdef\probpointseach{x}%
+        \setcounter{eq@count}{\value{eqquestionnoi}}%
+        \addtocounter{eq@count}{1}%
+        \expandafter
+            \ifx\csname prob\thisexamlabel.\theeq@count\endcsname\relax
+            \def\numpoints{\argi}%
+        \else
+            \def\numpoints{\expandafter
+            \csname prob\thisexamlabel.\theeqquestionnoi\endcsname}%
+        \fi
+    \fi
+    \ifx\marginpoints\@empty
+    % no points for this problem specified
+    \else
+        \ifx\argi\@empty
+            \let\marginpoints\@empty
+        \else
+            \ifx\argii\@empty
+                \ifx\marginpoints\@empty\else
+                    \def\marginparpriorhook{%
+                        \noindent\probvalue{\numpoints}{0}%
+                    }%
+                \fi
+            \else
+                \ifx\marginpoints\@empty\else
+                    \def\marginparpriorhook{%
+                        \noindent\probvalue{\numpoints}{\argi}%
+                    }%
+                \fi
+            \fi
+        \fi
+    \fi
+    \ifnum\value{eq@count}=1\relax
+        \immediate\write\@auxout{\string\expandafter\string\gdef\string
+        \csname\space pagenofirstprob\thisexamlabel\string\endcsname
+            {\thepage}}%
+    \else
+    \goodbreak
+    \fi
+}
+\def\autocalcparts{%
+    \setcounter{eq@count}{\value{eqquestionnoi}}%
+    \addtocounter{eq@count}{1}%
+    \expandafter
+    \ifx\csname prob\thisexamlabel.\theeq@count\endcsname\relax
+        \def\numpoints{0}% assume zero points until we get the total
+    \else
+        \edef\numpoints{\expandafter
+            \csname prob\thisexamlabel.\theeq@count\endcsname}%
+    \fi
+    \ifx\marginpoints\@empty\else
+        \def\marginparpriorhook{\noindent\probvalue{\numpoints}{0}}%
+    \fi
+    \setcounter{eq@count}{0}%
+}
+\newcommand{\forproblem}[1]{\setcounter{eqquestionnoi}{#1 - 1}}
+\newcommand{\foritem}[1]{%
+    \setcounter{partno}{0}%
+    \lowercase{\def\eq@selectedItem{#1}}%
+    \let\eq@initLoop=0
+    \loop
+        \stepcounter{partno}%
+        \expandafter\if\alph{partno}\eq@selectedItem
+            \let\eq@initLoop=1
+        \fi
+    \if\eq@initLoop0\repeat
+    \addtocounter{partno}{-1}%
+    \item
+}
+\newcommand\aNewPage{\ifanswerkey\newpage\fi}
+\newcommand\qNewPage{\ifanswerkey\else\newpage\fi}
+\newcounter{backofpage}
+\newcommand\bopText{on the back of page~\boPage}
+\newcommand\bopCoverPageText{\space(the cover page)}
+\newcommand\OnBackOfPage[1][\bopText]{%
+    \refstepcounter{backofpage}\label{bop\thebackofpage}
+    \begingroup
+    \expandafter\ifx\csname r@bop\thebackofpage\endcsname\relax
+        \def\boPage{??}%
+    \else
+        \edef\temp{\csname r@bop\thebackofpage\endcsname}%
+        \ifx\hyper@anchor\@undefined
+            \edef\boPage{\expandafter\@secondoftwo\temp}%
+        \else
+            \edef\boPage{\expandafter\@secondoffive\temp}%
+        \fi
+        \c@eq@count\boPage
+        \advance\c@eq@count-1\relax
+        \edef\boPage
+        {%
+            \ifx\eqex@coverpage\relax
+                \expandafter\ifnum\value{eq@count}=0\relax
+                    1%
+                \else
+                    {\theeq@count}%
+                \fi
+            \else
+                \ifnum\value{eq@count}=1\relax
+                    {\theeq@count}\bopCoverPageText
+                \else
+                    {\theeq@count}%
+                \fi
+            \fi
+        }%
+    \fi
+    #1%
+    \endgroup
+}
+\pagestyle{eqExamheadings}
+\IfFileExists{xkeyval}{%
+    \if\eq@usexkeys y\RequirePackage{xkeyval}\else
+    \endinput\fi}{\endinput}
+\define@boolkey{eqFillin}{underline}[true]{}
+\define@key{eqFillin}{u}[]{\KV@eqFillin@underlinetrue}
+\define@key{eqFillin}{b}[]{\KV@eqFillin@underlinefalse}
+\define@boolkey{eqFillin}{boxed}[true]{}
+\define@key{eqFillin}{boxpretext}[]{\def\eq@fillintext{#1}}
+\let\eq@fillintext\@empty
+\define@choicekey+{eqFillin}{boxsize}{tiny,scriptsize,footnotesize,%
+    small,normalsize,large,Large,LARGE,huge,Huge}[normalsize]{%
+    \def\eq@eqFillin@boxsize{\text{\csname#1\endcsname\strut}}%
+}{\PackageWarning{eqexam}{Bad choice for boxsize, permissible values
+    are tiny, scriptsize, footnotesize, small, normalsize,
+    large, Large, LARGE, huge and Huge. Try again}}
+\def\eq@eqFillin@boxsize{\text{\normalsize\strut}}
+\define@key{eqFillin}{color}[red]{\def\eq@fillin@color{#1}}
+\define@choicekey+{eqFillin}{align}{l,r,c}[c]{%
+    \def\eq@eqFillin@align{#1}}{%
+    \PackageWarning{eqexam}{Bad choice for align, permissible values
+    are l, r, and c. Try again}}
+\define@key{eqFillin}{format}[\bfseries]{\def\eq@fillin@format{#1}}
+\renewcommand{\fillin}[3][]{\begingroup%
+    \setkeys{eqFillin}{boxsize,underline=false,boxed=false,%
+    boxpretext,color,align,format}%
+    \protected@edef\eq@temp@exp{\noexpand\setkeys{eqFillin}{#1}}%
+    \eq@temp@exp
+    \ifKV@eqFillin@underline\let\@fillinFmt\underbar
+    \else\let\@fillinFmt\relax\fi
+    \ifeq@proofing
+        \ifKV@eqFillin@boxed
+            \ensuremath{\boxed{\eq@eqFillin@boxsize\eq@fillintext
+            \@fillinFmt{\makebox[#2][\eq@eqFillin@align]{%
+            \strut\eq@fillin@format\color{\eq@fillin@color}%
+            \ensuremath{#3}}}}}%
+        \else
+            \ifmmode\let\@eqmath\ensuremath\else\let\@eqmath\relax\fi
+            \@fillinFmt{\makebox[#2][\eq@eqFillin@align]{%
+                \strut\eq@fillin@format\color{\eq@fillin@color}%
+                \@eqmath{#3}}}%
+        \fi
+    \else
+        \ifKV@eqFillin@boxed
+            \ensuremath{\boxed{\eq@eqFillin@boxsize\eq@fillintext
+                \@fillinFmt{\makebox[#2]{\strut\hfil}}}}%
+        \else
+            \@fillinFmt{\makebox[#2]{\strut\hfil}}%
+        \fi
+        \@ifundefined{@quiz}{}{%
+            \ifx\eq@online y\relax
+                \ifeq@nosolutions
+                    \ifeq@solutionsafter\else
+                        \ifx\eq@insertverticalspace y\relax
+                            \stepcounter{@cntfillin}%
+                            \edef\fieldName{%
+                                \if\probstar*eqexam.\curr@quiz.fillin.%
+                                   \theeqquestionnoi.part\alph{partno}.%
+                                    fi\the@cntfillin
+                                \else
+                                    eqexam.\curr@quiz.fillin.%
+                                    \theeqquestionnoi.fi\the@cntfillin
+                                \fi
+                            }\makebox[0pt][r]{\textField[\BC{}]{%
+                                \fieldName}{#2}{11bp}}%
+                        \fi
+                    \fi
+                \fi
+            \fi
+        }%
+    \fi\endgroup\space\ignorespaces}
+\renewcommand\TF[2][\defaultTFwidth]{%
+    \def\eq@next{\fillin[underline]{#1}{#2}}%
+    \ifdim\eq@extralabelsep=0pt\relax\else
+        \if\probstar*\relax\if\exerwparts@cols x
+            \def\eq@next{\makebox[0pt][r]{%
+                \fillin[underline]{#1}{#2}}\ignorespaces}%
+    \fi\fi\fi
+\eq@next}
+\endinput
+%%
+%% End of file `eqexam.sty'.
