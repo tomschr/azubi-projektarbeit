@@ -3,6 +3,8 @@
 This GitHub project is mainly intended for trainees. All the information
 is in German.
 
+License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
 ## Installation
 
 Unter openSUSE, installiere folgende Pakete:
@@ -19,3 +21,4 @@ Um das PDF zu erzeugen, führe aus:
     $ pdflatex projektarbeit.tex
 
 Du musst `pdflatex` zweimal ausführen, um alle Referenzen aufzulösen.
+
