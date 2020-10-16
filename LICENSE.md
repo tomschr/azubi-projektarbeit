@@ -29,6 +29,7 @@ You do not have to comply with the license for elements of the material in the p
 
 No warranties are given. The license may not give you all of the permissions necessary for your intended use. For example, other rights such as publicity, privacy, or moral rights<sup id="f2">[2](#fn.publicity)</sup> may limit how you use the material.
 
+-----
 
 <a name="fn.exception">1</a>: The rights of users under the exceptions and limitations,
 such as fair use and fair dealing, are not affected by the CC license. [↩](#f1)
