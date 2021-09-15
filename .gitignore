@@ -277,3 +277,8 @@ TSWLatexianTemp*
 
 # Backup files
 *~
+
+#
+*.qsl
+*.sol
+*.pdf
